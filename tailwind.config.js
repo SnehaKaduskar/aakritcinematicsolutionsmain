@@ -6,16 +6,14 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "#0d0d0d", // Deep Onyx
-        secondary: "#1a1a1a", // Charcoal
-        accent: "#00ff88", // Electric Mint
-        background: "#000000", // Pure Black
-        surface: "#151515", // Soft Black
-        text: "#f5f5f5", // Off-White
-        muted: "#666666", // Muted Gray
-        border: "#2a2a2a", // Subtle Border
-      },
+      primary: "#1a1a1a", // Deep Onyx -> Dark Text/Primary
+      secondary: "#333333", // Charcoal -> Lighter Dark
+      accent: "#000000", // Electric Mint -> Black Accent (high contrast)
+      background: "#F2DD5E", // User requested background
+      surface: "#F7E68D", // Slightly lighter/shifted version of background for surface
+      text: "#1a1a1a", // Dark text for light background
+      muted: "#555555", // Darker muted for visibility
+      border: "#E0C040", // Darker binding yellow
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Inter', 'sans-serif'],

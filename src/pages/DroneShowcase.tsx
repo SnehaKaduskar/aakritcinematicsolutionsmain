@@ -48,7 +48,7 @@ const DroneShowcase = () => {
 
     return (
         <div
-            className="min-h-screen w-full bg-gradient-to-b text-text"
+            className="min-h-screen w-full text-text"
             onPointerMove={(event) => {
                 const { clientX, clientY, currentTarget } = event;
                 const { width, height, left, top } = (currentTarget as HTMLElement).getBoundingClientRect();
@@ -57,7 +57,7 @@ const DroneShowcase = () => {
                 pointer.current = { x, y: -y };
             }}
         >
-            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#020202] via-[#03150f] to-[#020202]" />
+
 
             <header className="flex items-center justify-between px-8 py-6">
                 <Link
@@ -96,7 +96,7 @@ const DroneShowcase = () => {
                     </div>
                 </motion.section>
 
-                <div className="relative h-[70vh] flex-1 overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#050505]">
+                <div className="relative h-[70vh] flex-1 overflow-hidden rounded-[2.5rem] border border-black/10 bg-black/5">
                     <Canvas camera={{ position: [0, 0, 4], fov: 42 }}>
                         <ambientLight intensity={0.7} />
                         <directionalLight position={[3, 4, 5]} intensity={1.2} />
