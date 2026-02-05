@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { ImageIcon } from 'lucide-react';
 import clsx from 'clsx';
-import { useState } from 'react';
 
 interface GalleryProps {
     id?: string;
@@ -23,7 +22,7 @@ const Gallery = ({ id = "gallery", className }: GalleryProps) => {
         <section
             id={id}
             className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden",
+                "min-h-[100dvh] lg:h-[100dvh] w-full lg:w-screen flex items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden py-20 lg:py-0",
                 className
             )}
         >

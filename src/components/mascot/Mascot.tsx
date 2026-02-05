@@ -1,24 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import lottie, { type AnimationItem } from 'lottie-web';
+import gsap from 'gsap';
 import walkData from '../../assets/walk.json';
 import idleData from '../../assets/idle.json';
+import landingData from '../../assets/landing.json';
 
 interface MascotProps {
     containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const Mascot = ({ containerRef }: MascotProps) => {
+const Mascot = ({ containerRef, onLandingComplete }: MascotProps & { onLandingComplete?: () => void }) => {
     const walkContainerRef = useRef<HTMLDivElement>(null);
     const idleContainerRef = useRef<HTMLDivElement>(null);
+    const landingContainerRef = useRef<HTMLDivElement>(null);
     const walkAnimRef = useRef<AnimationItem | null>(null);
     const idleAnimRef = useRef<AnimationItem | null>(null);
+    const landingAnimRef = useRef<AnimationItem | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // State to toggle between idle and walk
     const [isWalking, setIsWalking] = useState(false);
-
-    // Debug State (console only now)
-    const [debugInfo, setDebugInfo] = useState({ walkLoaded: false, idleLoaded: false });
+    const [isLanding, setIsLanding] = useState(true);
 
     const scrollTimeout = useRef<number | null>(null);
 
@@ -36,12 +37,6 @@ const Mascot = ({ containerRef }: MascotProps) => {
                     animationData: walkData,
                     rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
                 });
-
-                walkAnimRef.current.addEventListener('DOMLoaded', () => {
-                    console.log("Mascot: Walk Loaded");
-                    setDebugInfo(prev => ({ ...prev, walkLoaded: true }));
-                });
-
             } catch (error) {
                 console.error("Mascot: Failed to load walk animation", error);
             }
@@ -59,28 +54,86 @@ const Mascot = ({ containerRef }: MascotProps) => {
                     animationData: idleData,
                     rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
                 });
+            } catch (error) {
+                console.error("Mascot: Failed to load idle animation", error);
+            }
+        }
 
-                idleAnimRef.current.addEventListener('DOMLoaded', () => {
-                    console.log("Mascot: Idle Loaded");
-                    setDebugInfo(prev => ({ ...prev, idleLoaded: true }));
+        // --- Landing Animation ---
+        if (landingContainerRef.current) {
+            try {
+
+                if (landingAnimRef.current) landingAnimRef.current.destroy();
+                landingAnimRef.current = lottie.loadAnimation({
+                    container: landingContainerRef.current,
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: true,
+                    animationData: landingData,
+                    rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+                });
+
+                landingAnimRef.current.addEventListener('DOMLoaded', () => {
+
+                });
+
+                landingAnimRef.current.addEventListener('complete', () => {
+
+                    handleLandingComplete();
                 });
 
             } catch (error) {
-                console.error("Mascot: Failed to load idle animation", error);
+                console.error("Mascot: Failed to load landing animation", error);
             }
         }
 
         return () => {
             walkAnimRef.current?.destroy();
             idleAnimRef.current?.destroy();
+            landingAnimRef.current?.destroy();
         };
     }, []);
+
+    const handleLandingComplete = () => {
+        if (!wrapperRef.current) return;
+
+
+
+        // Notify parent
+        if (onLandingComplete) onLandingComplete();
+
+        setIsLanding(false);
+        if (wrapperRef.current) {
+            gsap.set(wrapperRef.current, { clearProps: "all" });
+        }
+    };
+
+    // Initial setup for landing position
+    useEffect(() => {
+        if (isLanding && wrapperRef.current) {
+
+            // Start fullscreen
+            gsap.set(wrapperRef.current, {
+                position: 'fixed',
+                left: 0,
+                top: 0,
+                width: '100vw',
+                height: '100vh',
+                xPercent: 0,
+                yPercent: 0,
+                bottom: 'auto',
+                zIndex: 9999
+            });
+        }
+    }, []); // Run once on mount
 
     const lastScrollPos = useRef(0);
     const facingRight = useRef(true);
 
     // Scroll Handler
     useEffect(() => {
+        if (isLanding) return; // Disable scroll movement during landing
+
         const container = containerRef.current;
         if (!container) return;
 
@@ -89,86 +142,76 @@ const Mascot = ({ containerRef }: MascotProps) => {
             const maxScroll = container.scrollWidth - container.clientWidth;
             const progress = maxScroll > 0 ? scrollPos / maxScroll : 0;
 
-            // Determine Direction
             const diff = scrollPos - lastScrollPos.current;
-            if (Math.abs(diff) > 0.5) { // Small threshold to avoid noise
-                if (diff > 0) {
-                    facingRight.current = true;
-                } else if (diff < 0) {
-                    facingRight.current = false;
-                }
+            if (Math.abs(diff) > 0.5) {
+                if (diff > 0) facingRight.current = true;
+                else if (diff < 0) facingRight.current = false;
             }
             lastScrollPos.current = scrollPos;
 
-            // 1. Scrub Walk
             const walkAnim = walkAnimRef.current;
             if (walkAnim && walkAnim.isLoaded) {
                 const totalFrames = walkAnim.totalFrames > 0 ? walkAnim.totalFrames : 60;
                 const pixelsPerFrame = 15;
                 let frame = (scrollPos / pixelsPerFrame) % totalFrames;
-
-                // Reverse animation when walking backwards so it looks like walking forward
-                if (!facingRight.current) {
-                    frame = (totalFrames - frame) % totalFrames;
-                }
-
+                if (!facingRight.current) frame = (totalFrames - frame) % totalFrames;
                 walkAnim.goToAndStop(frame, true);
             }
 
-            // 2. Lateral Movement & Flip
             const moveDistanceOfScreen = window.innerWidth * 0.88;
-            const currentX = progress * moveDistanceOfScreen;
-            const scaleX = facingRight.current ? 1 : -1;
-
             if (wrapperRef.current) {
-                wrapperRef.current.style.transform = `translateX(${currentX}px) translateZ(0) scaleX(${scaleX})`;
+                wrapperRef.current.style.transform = `translateX(${progress * moveDistanceOfScreen}px) scaleX(${facingRight.current ? 1 : -1})`;
             }
 
-            // 3. State Switching (SKIP on initial load)
             if (!isInitial) {
                 if (!isWalking) setIsWalking(true);
-
                 if (scrollTimeout.current) window.clearTimeout(scrollTimeout.current);
-                // 500ms timeout to return to Idle
-                scrollTimeout.current = window.setTimeout(() => {
-                    setIsWalking(false);
-                }, 500);
+                scrollTimeout.current = window.setTimeout(() => setIsWalking(false), 50);
             }
         };
 
-        // Initial update (pass true to skip state switching)
         handleScroll(true);
-
-        // Event listener wrapper
         const onScroll = () => handleScroll(false);
-
         container.addEventListener('scroll', onScroll, { passive: true });
         return () => {
             container.removeEventListener('scroll', onScroll);
             if (scrollTimeout.current) window.clearTimeout(scrollTimeout.current);
         };
-    }, [containerRef, isWalking]);
+    }, [containerRef, isWalking, isLanding]);
 
     return (
         <div
             ref={wrapperRef}
-            className="absolute left-8 z-[9999] pointer-events-none transition-transform duration-75 ease-linear will-change-transform"
+            className={`fixed lg:absolute z-[9999] pointer-events-none ${isLanding ? '' : 'left-4 lg:left-8'}`}
             style={{
-                width: '180px',
-                height: '180px',
-                bottom: '20px',
+                // While landing, we let GSAP control size/pos. 
+                // After landing, we use these styles as base.
+                bottom: isLanding ? 'auto' : '10px',
+                width: isLanding ? '100vw' : '180px',
+                height: isLanding ? '100vh' : '180px',
+                transition: isLanding ? 'none' : 'transform 75ms ease-linear'
             }}
         >
+            {/* Landing Container */}
+            <div
+                ref={landingContainerRef}
+                className={`w-full h-full absolute top-0 left-0 transition-opacity duration-0 ${isLanding ? 'opacity-100' : 'opacity-0'}`}
+                style={{
+                    transform: isLanding ? 'scale(1.4)' : 'scale(1)',
+                    transformOrigin: 'center center'
+                }}
+            />
+
             {/* Walk Container */}
             <div
                 ref={walkContainerRef}
-                className={`w-full h-full absolute top-0 left-0 transition-opacity duration-300 ${isWalking ? 'opacity-100' : 'opacity-0'}`}
+                className={`w-full h-full absolute top-0 left-0 transition-opacity duration-0 ${isWalking && !isLanding ? 'opacity-100' : 'opacity-0'}`}
             />
 
             {/* Idle Container */}
             <div
                 ref={idleContainerRef}
-                className={`w-full h-full absolute top-0 left-0 transition-opacity duration-300 ${isWalking ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-full absolute top-0 left-0 transition-opacity duration-0 ${!isWalking && !isLanding ? 'opacity-100' : 'opacity-0'}`}
             />
         </div>
     );

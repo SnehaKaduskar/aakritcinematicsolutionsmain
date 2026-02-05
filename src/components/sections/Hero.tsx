@@ -33,32 +33,33 @@ const Hero = ({ id = "hero", className }: HeroProps) => {
             id={id}
             ref={ref}
             className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden",
+                // Mobile: min-h-screen, w-full, flex-col. Desktop: h-screen, fixed height, horizontal logic
+                "min-h-[100dvh] lg:h-[100dvh] w-full lg:w-screen flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden",
                 className
             )}
         >
             {/* Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a2a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a2a_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
 
-            <motion.div style={{ y, opacity }} className="relative z-10 w-full px-6 sm:px-8">
+            <motion.div style={{ y, opacity }} className="relative z-10 w-full px-6 sm:px-8 py-20 lg:py-0">
                 <div className="mx-auto max-w-[1100px] space-y-8">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-2 font-mono text-xs uppercase tracking-[0.35em] text-muted backdrop-blur"
+                        className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 sm:px-5 sm:py-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-muted backdrop-blur"
                     >
                         <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                         Aarkit Cinematic Solutions
                     </motion.div>
 
-                    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+                    <div className="grid gap-12 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
                         <div className="space-y-6">
                             <motion.h1
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                className="font-display text-[clamp(3.5rem,6vw,7rem)] font-black leading-[0.95]"
+                                className="font-display text-[clamp(2.5rem,10vw,7rem)] font-black leading-[0.95]"
                             >
                                 Cinematic{" "}
                                 <span className="text-accent">Intelligence</span>
@@ -70,7 +71,7 @@ const Hero = ({ id = "hero", className }: HeroProps) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.3 }}
-                                className="text-lg leading-relaxed text-muted md:text-xl"
+                                className="text-base leading-relaxed text-muted md:text-xl max-w-2xl"
                             >
                                 We craft immersive visual experiences that transcend traditional storytelling.
                                 From first spark to final frame, our team merges narrative craftsmanship with

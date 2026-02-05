@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import SeamlessBackground from '../components/ui/SeamlessBackground';
 import HorizontalScrollContainer from '../components/layout/HorizontalScrollContainer';
 import Hero from '../components/sections/Hero';
 import About from '../components/sections/About';
@@ -10,29 +11,17 @@ import Clients from '../components/sections/Clients';
 import Contact from '../components/sections/Contact';
 import CanvasCursor from '../components/ui/CanvasCursor';
 import Loader from '../components/ui/Loader';
-import ProgressHUD from '../components/layout/ProgressHUD';
 import useMediaQuery from '../hooks/useMediaQuery';
+
 
 const HomeExperience = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const scrollerRef = useRef<HTMLDivElement | null>(null);
+    const scrollerRef = useRef<HTMLDivElement>(null);
     const isDesktop = useMediaQuery('(min-width: 1024px)');
-
-    const sections = useMemo(
-        () => [
-            { id: 'hero', label: 'Home' },
-            { id: 'services', label: 'Services' },
-            { id: 'projects', label: 'Portfolio' }, // Projects mapped to Portfolio
-            { id: 'gallery', label: 'Gallery' },
-            { id: 'clients', label: 'Clients' },
-            { id: 'about', label: 'About Us' },
-            { id: 'contact', label: 'Contact' },
-        ],
-        []
-    );
+    const [isLandingComplete, setIsLandingComplete] = useState(false);
 
     return (
-        <div className="bg-background text-text antialiased overflow-hidden">
+        <div className="bg-background text-text antialiased lg:overflow-hidden min-h-screen relative">
             <CanvasCursor />
 
             <AnimatePresence mode="wait">
@@ -43,13 +32,11 @@ const HomeExperience = () => {
 
             {!isLoading && (
                 <>
-                    {isDesktop && (
-                        <ProgressHUD containerRef={scrollerRef} sections={sections} />
-                    )}
-
+                    <SeamlessBackground scrollerRef={scrollerRef} isVisible={isLandingComplete} />
                     <HorizontalScrollContainer
                         scrollerRef={scrollerRef}
                         isDesktop={isDesktop}
+                        onLandingComplete={() => setIsLandingComplete(true)}
                     >
                         <Hero id="hero" />
                         <Services id="services" />
@@ -66,6 +53,7 @@ const HomeExperience = () => {
 };
 
 export default HomeExperience;
+
 
 
 

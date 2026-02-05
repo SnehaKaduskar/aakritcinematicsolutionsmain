@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Award, Users, Film } from 'lucide-react';
 import clsx from 'clsx';
-import CookingLoop from '../visuals/CookingLoop';
+
 
 interface AboutProps {
     id?: string;
@@ -41,19 +41,7 @@ const About = ({ id = "about", className }: AboutProps) => {
                 className
             )}
         >
-            {/* Cooking Loop in top right */}
-            <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 0.35 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute top-8 right-8 z-10"
-            >
-                <div className="rounded-2xl  bg-white/5 p-3 backdrop-blur-lg">
-                    <div className="h-20 w-20">
-                        <CookingLoop className="h-full w-full" />
-                    </div>
-                </div>
-            </motion.div>
+
 
             <div className="max-w-7xl px-8 w-full grid md:grid-cols-12 gap-16 items-start">
                 {/* Left: Title & Description */}
