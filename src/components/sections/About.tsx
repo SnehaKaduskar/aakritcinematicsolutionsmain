@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 
-import UrviSvg from '../../assets/URvi-01.svg';
-import ChiragSvg from '../../assets/CHIRAG-01.svg';
-import ParasSvg from '../../assets/PARAS-01.svg';
-import RupeshSvg from '../../assets/RUPESH-01.svg';
+import UrviSvg from '../../assets/Team/URvi-01.svg';
+import ChiragSvg from '../../assets/Team/CHIRAG-01.svg';
+import ParasSvg from '../../assets/Team/PARAS-01.svg';
+import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
 
 interface TeamMember {
     id: number;
@@ -65,7 +65,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
         <section
             id={id}
             className={clsx(
-                'min-h-[100dvh] w-screen flex flex-col items-center justify-center flex-shrink-0 relative overflow-hidden',
+                'min-h-[100dvh] w-screen flex flex-col items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10',
                 className
             )}
         >

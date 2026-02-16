@@ -22,6 +22,8 @@ const HorizontalScrollContainer = ({
     // Use external ref if provided, otherwise use internal
     const scrollerRef = (externalScrollerRef || internalScrollerRef) as React.RefObject<HTMLDivElement>;
 
+    console.log('[HorizontalScrollContainer] Render', { isDesktop, startLanding });
+
     // State to track mascot landing animation
     const [isMascotLanding, setIsMascotLanding] = useState(true);
 
@@ -57,7 +59,7 @@ const HorizontalScrollContainer = ({
 
             <Mascot
                 containerRef={scrollerRef}
-                startLanding={startLanding}
+                startLanding={startLanding && isMascotLanding}
                 onLandingComplete={() => {
                     setIsMascotLanding(false);
                     onLandingComplete?.();

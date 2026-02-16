@@ -29,7 +29,7 @@ const Clients = ({ id = 'clients', className }: ClientsProps) => {
         <section
             id={id}
             className={clsx(
-                'h-[100dvh] w-screen flex items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden',
+                'h-[100dvh] w-screen flex items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10',
                 className
             )}
         >

@@ -1,13 +1,26 @@
-import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import HomeExperience from './pages/HomeExperience';
-import DroneShowcase from './pages/DroneShowcase';
+import Navbar from './components/layout/Navbar';
+import FloatingContactMenu from './components/ui/FloatingContactMenu';
+
 
 function App() {
+  const [isHomeLandingComplete, setIsHomeLandingComplete] = useState(false);
+  const location = useLocation();
+  const shouldShowNavbar = location.pathname === '/' ? isHomeLandingComplete : true;
+
   return (
-    <Routes>
-      <Route path="/" element={<HomeExperience />} />
-      <Route path="/drone" element={<DroneShowcase />} />
-    </Routes>
+    <>
+      <Navbar isVisible={shouldShowNavbar} />
+      <Routes>
+        <Route
+          path="/"
+          element={<HomeExperience onLandingComplete={() => setIsHomeLandingComplete(true)} />}
+        />
+      </Routes>
+      <FloatingContactMenu />
+    </>
   );
 }
 

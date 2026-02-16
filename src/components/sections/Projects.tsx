@@ -43,7 +43,7 @@ const Projects = ({ id = "projects", className }: ProjectsProps) => {
         <section
             id={id}
             className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-secondary flex-shrink-0 relative overflow-hidden py-20 lg:py-0",
+                "h-[100dvh] w-screen flex items-center justify-center bg-secondary flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10",
                 className
             )}
         >

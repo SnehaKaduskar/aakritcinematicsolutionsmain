@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Retroica';
+  src: url('./assets/fonts/Retroica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-primary: 'Retroica', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-primary);
   line-height: 1.5;
   font-weight: 400;
 
@@ -60,7 +68,7 @@ body::before {
   height: 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
+  z-index: 50;
 }
 
 @media (max-width: 1023px) {

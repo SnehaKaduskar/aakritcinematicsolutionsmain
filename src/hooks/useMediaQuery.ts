@@ -20,8 +20,10 @@ export const useMediaQuery = (query: string) => {
       setMatches(event.matches);
     };
 
-    // Set initial value in case query changed
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMatches(mediaQuery.matches);
+
 
     if (typeof mediaQuery.addEventListener === 'function') {
       mediaQuery.addEventListener('change', handler);

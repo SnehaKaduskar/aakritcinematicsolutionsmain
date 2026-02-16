@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 const CanvasCursor = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(() => {
+        if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') return false;
+        return window.matchMedia('(pointer: fine)').matches;
+    });
 
     useEffect(() => {
         if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
@@ -10,7 +13,7 @@ const CanvasCursor = () => {
         }
         const mediaQuery = window.matchMedia('(pointer: fine)');
         const handleChange = (event: MediaQueryListEvent) => setIsEnabled(event.matches);
-        setIsEnabled(mediaQuery.matches);
+
         mediaQuery.addEventListener('change', handleChange);
         return () => mediaQuery.removeEventListener('change', handleChange);
     }, []);

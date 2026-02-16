@@ -88,18 +88,27 @@ const FloatingContactMenu = () => {
                 ].join(' ')}
             >
                 <div
-                    className="w-[220px] rounded-[32px] py-32 px-10 backdrop-blur-2xl"
+                    className="rounded-[32px] backdrop-blur-2xl"
                     style={{
+                        width: '300px',
+                        padding: '40px 20px',
                         backgroundColor: 'rgba(20, 20, 20, 0.85)',
                         border: '1px solid rgba(255, 255, 255, 0.1)',
                         boxShadow:
                             '0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                     }}
                 >
-                    <p className="w-full pb-12 pt-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 text-center select-none" style={{ fontFamily: 'var(--font-primary)' }}>
+                    <p className="w-full pb-12 pt-1 font-bold uppercase tracking-[0.2em] text-center select-none" style={{ fontFamily: 'var(--font-primary)', color: '#ffffff', fontSize: '20px' }}>
                         Quick Contact
                     </p>
-                    <ul className="flex flex-col gap-16 list-none m-0 p-0 w-full">
+                    <ul
+                        className="list-none m-0 p-0 w-full"
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '15px'
+                        }}
+                    >
                         {QUICK_LINKS.map((link) => (
                             <li key={link.label} className="w-full">
                                 <a
@@ -112,9 +121,8 @@ const FloatingContactMenu = () => {
                                         flex items-center justify-center
                                         w-full
                                         rounded-full
-                                        h-14
                                         px-6
-                                        text-[14px] font-semibold tracking-wide text-[#1a1a1a]
+                                        text-[20px] font-semibold tracking-wide text-[#1a1a1a]
                                         transition-all duration-200 ease-out
                                         hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]
                                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50
@@ -124,6 +132,8 @@ const FloatingContactMenu = () => {
                                         border: 'none',
                                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                                         fontFamily: 'var(--font-primary)',
+                                        textDecoration: 'none',
+                                        height: '45px',
                                     }}
                                 >
                                     {link.label}
@@ -149,7 +159,7 @@ const FloatingContactMenu = () => {
                     transition-all duration-300 ease-out
                     hover:-translate-y-1 hover:shadow-lg
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50
-                    ${isOpen ? 'w-16 h-16 p-0 rotate-0' : 'min-w-[140px] h-[60px] px-8'}
+                    ${isOpen ? 'w-20 h-20 p-0 rotate-0' : 'min-w-[140px] h-[60px] px-8'}
                 `}
                 style={{
                     backgroundColor: RAISIN_BLACK,
@@ -158,10 +168,12 @@ const FloatingContactMenu = () => {
                     boxShadow:
                         '0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
                     fontFamily: 'var(--font-primary)',
+                    width: isOpen ? '60px' : undefined,
+                    height: isOpen ? '60px' : undefined,
                 }}
             >
                 {isOpen ? (
-                    <X className="h-8 w-8 text-white/90 transition-transform duration-300 group-hover:rotate-90" />
+                    <X className="text-white/90 transition-transform duration-300 group-hover:rotate-90" style={{ width: '30px', height: '30px' }} />
                 ) : (
                     <span className="translate-y-[1px]">Quick Links</span>
                 )}
