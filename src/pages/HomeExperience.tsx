@@ -10,7 +10,6 @@ import Projects from '../components/sections/Projects';
 import Clients from '../components/sections/Clients';
 import Team from '../components/sections/Team';
 import Contact from '../components/sections/Contact';
-import useMediaQuery from '../hooks/useMediaQuery';
 
 interface HomeExperienceProps {
     onLandingComplete?: () => void;
@@ -20,7 +19,7 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
     const [showBackground, setShowBackground] = useState(false);
     const [isLandingComplete, setIsLandingComplete] = useState(false);
     const scrollerRef = useRef<HTMLDivElement>(null);
-    const isDesktop = useMediaQuery('(min-width: 1024px)');
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -57,7 +56,6 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
             <SeamlessBackground scrollerRef={scrollerRef} isVisible={showBackground} />
             <HorizontalScrollContainer
                 scrollerRef={scrollerRef}
-                isDesktop={isDesktop}
                 startLanding={true}
                 onLandingComplete={handleLandingComplete}
             >
