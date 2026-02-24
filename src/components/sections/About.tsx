@@ -26,10 +26,9 @@ const itemVariants = {
 
 const About = ({ id = 'about', className }: AboutProps) => {
     const isDesktop = useMediaQuery('(min-width: 1024px)');
-    const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 1023px)');
+    const isTablet = useMediaQuery('(min-width: 600px) and (max-width: 1023px)');
 
     useEffect(() => {
-        // Inject Retroica font
         if (!document.getElementById('retroica-font-face')) {
             const s = document.createElement('style');
             s.id = 'retroica-font-face';
@@ -38,148 +37,159 @@ const About = ({ id = 'about', className }: AboutProps) => {
         }
     }, []);
 
-    // Derive padding and font sizes per breakpoint
-    const horizontalPadding = isDesktop ? '6%' : isTablet ? '6%' : '5%';
-    const bodySize = isDesktop
-        ? 'text-[clamp(11px,0.75vw,14px)]'
+    /* Safe-zone constants (px) — navbar top + mascot bottom */
+    const navH = isDesktop ? 100 : isTablet ? 120 : 64;
+    const mascotH = isDesktop ? 160 : isTablet ? 140 : 100;
+
+    // Pure relative units to ensure it NEVER overflows visually and always looks uniform
+    const paddingX = isDesktop ? 'min(3vw, 3vh)' : 'min(6vw, 1.5rem)';
+    const paddingY = isDesktop ? 'min(3vh, 3vw)' : 'min(3vh, 1rem)';
+
+    // Inline styles ensure CSS min()/clamp() functions are parsed flawlessly unconditionally
+    const bodySizeStyle = isDesktop
+        ? { fontSize: 'min(1vw, 1.4vh)', lineHeight: 'min(1.6vw, 2.2vh)' }
         : isTablet
-            ? 'text-xs'
-            : 'text-[11px] leading-snug';
-    const taglineSize = isDesktop
-        ? 'text-xs'
+            ? { fontSize: 'min(2vw, 2.2vh)', lineHeight: 'min(3.2vw, 3vh)' }
+            : { fontSize: 'min(3.5vw, 1.4vh)', lineHeight: 'min(5vw, 2.1vh)' };
+
+    const taglineSizeStyle = isDesktop
+        ? { fontSize: 'min(1vw, 1.4vh)' }
         : isTablet
-            ? 'text-sm'
-            : 'text-sm';
+            ? { fontSize: 'min(2vw, 2.2vh)' }
+            : { fontSize: 'min(3.5vw, 1.5vh)' };
 
     return (
         <section
             id={id}
             className={clsx(
-                'w-screen flex-shrink-0 flex justify-center bg-transparent relative overflow-hidden',
-                isDesktop || isTablet ? 'min-h-screen items-center' : 'items-center',
+                'w-screen flex-shrink-0 flex flex-col items-center justify-center bg-transparent relative overflow-hidden',
                 className
             )}
             style={{
-                height: isDesktop ? undefined : '100vh',
-                paddingBottom: isDesktop ? '8vh' : isTablet ? '6vh' : 'calc(100px + 2rem)',
-                paddingTop: isDesktop ? '0' : isTablet ? '0' : 'calc(64px + 1rem)',
+                height: '100dvh', // Strictly lock it
+                boxSizing: 'border-box',
+                paddingTop: isDesktop ? `calc(${navH}px + 4vh)` : `calc(${navH}px + 2vh)`,
+                paddingBottom: isDesktop ? `calc(${mascotH}px + 4vh)` : `calc(${mascotH}px + 2vh)`,
+                paddingLeft: isDesktop ? '5vw' : '1.5rem',
+                paddingRight: isDesktop ? '5vw' : '1.5rem',
             }}
         >
-            <div className="w-full mx-auto relative z-10 flex justify-center items-center" style={{ maxWidth: isDesktop ? 'min(700px, 50vw)' : '100%', padding: isDesktop ? '0 4rem' : isTablet ? '0 4rem' : '0 2rem', maxHeight: isDesktop ? undefined : isTablet ? undefined : '100%' }}>
+            <div
+                className="w-full relative z-10 flex flex-col items-center justify-center mx-auto"
+                style={{
+                    maxWidth: isDesktop ? 'min(40vw, 85vh)' : isTablet ? '70vw' : '90vw',
+                    height: '100%',
+                    maxHeight: '100%',
+                }}
+            >
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.15 }}
                     variants={containerVariants}
                     className="flex flex-col items-center w-full"
+                    style={{
+                        height: '100%',
+                        maxHeight: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
                 >
+                    {/* Header inline (same as Portfolio/Team) */}
+                    <motion.div variants={itemVariants} className="flex flex-col items-center w-full flex-shrink-0" style={{ marginBottom: isDesktop ? 'min(2vh, 2vw)' : 'min(2vh, 1rem)' }}>
+                        <h2 style={{
+                            margin: 0,
+                            lineHeight: 1,
+                            fontWeight: 400,
+                            display: 'inline-block',
+                            whiteSpace: 'nowrap',
+                            position: 'relative',
+                        }}>
+                            <span style={{
+                                fontFamily: RETROICA,
+                                fontSize: isDesktop ? 'min(4vw, 7vh)' : 'clamp(1.5rem, min(8vw, 5vh), 2.5rem)',
+                                letterSpacing: '-0.02em',
+                                color: '#FFFFFF',
+                                textTransform: 'lowercase',
+                                fontWeight: 400,
+                                textShadow: `
+                                     0 0 8px rgba(255, 165, 0, 0.5),
+                                     0 0 16px rgba(255, 165, 0, 0.35),
+                                     0 0 30px rgba(255, 165, 0, 0.25),
+                                     0 0 50px rgba(255, 165, 0, 0.15),
+                                     0 0 70px rgba(255, 165, 0, 0.08)
+                                 `,
+                            }}>
+                                about us
+                            </span>
+                            <span style={{
+                                fontFamily: RETROICA,
+                                fontSize: isDesktop ? 'min(4vw, 7vh)' : 'clamp(1.5rem, min(8vw, 5vh), 2.5rem)',
+                                color: '#FFFFFF',
+                                fontWeight: 400,
+                                textShadow: `
+                                     0 0 8px rgba(255, 165, 0, 0.5),
+                                     0 0 16px rgba(255, 165, 0, 0.35),
+                                     0 0 30px rgba(255, 165, 0, 0.25),
+                                     0 0 50px rgba(255, 165, 0, 0.15),
+                                     0 0 70px rgba(255, 165, 0, 0.08)
+                                 `,
+                            }}>
+                                .
+                            </span>
+                        </h2>
+
+                        <div style={{
+                            position: 'relative',
+                            width: '100%',
+                            maxWidth: isDesktop ? 'min(20vw, 35vh)' : 'min(50vw, 240px)',
+                            height: '3px',
+                            marginTop: 'min(1vh, 0.5rem)',
+                            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%)',
+                            borderRadius: '9999px',
+                            boxShadow: '0 2px 8px rgba(255, 165, 0, 0.12)',
+                        }} />
+                    </motion.div>
+
+                    {/* Glassmorphism card container */}
                     <motion.div
                         variants={itemVariants}
-                        className="w-full relative flex items-center"
+                        className="w-full relative flex flex-col items-stretch flex-1 min-h-0"
                     >
                         <div
-                            className="flex flex-col items-center justify-center relative z-10 w-full"
+                            className="flex flex-col relative z-10 w-full h-full max-h-full"
                             style={{
-                                paddingLeft: horizontalPadding,
-                                paddingRight: horizontalPadding,
-                                paddingTop: isDesktop ? '1.25rem' : isTablet ? '1.25rem' : '0.75rem',
-                                paddingBottom: isDesktop ? '1.25rem' : isTablet ? '1.25rem' : '0.75rem',
+                                paddingLeft: paddingX,
+                                paddingRight: paddingX,
+                                paddingTop: paddingY,
+                                paddingBottom: paddingY,
                                 background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%)',
                                 backdropFilter: 'blur(8px) saturate(1.2)',
                                 WebkitBackdropFilter: 'blur(8px) saturate(1.2)',
-                                border: '1px solid rgba(255, 255, 255, 0.35)',
-                                borderTop: '1.5px solid rgba(255, 255, 255, 0.5)',
-                                borderLeft: '1px solid rgba(255, 255, 255, 0.4)',
-                                borderRadius: isDesktop ? '24px' : isTablet ? '20px' : '16px',
-                                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.3)',
-                                maxHeight: isDesktop ? undefined : isTablet ? undefined : 'calc(100vh - 64px - 100px - 3rem)',
-                                overflowY: isDesktop ? undefined : isTablet ? undefined : 'auto',
+                                border: '1.5px solid rgba(255, 255, 255, 0.4)',
+                                borderRadius: isDesktop ? '32px' : isTablet ? '28px' : '22px',
+                                boxShadow: '0 0 30px rgba(255, 140, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.3)',
+                                overflowY: 'hidden', // Strictly prevent scrollbars
                             }}
                         >
-                            {/* Heading - matching Team/Portfolio style */}
-                            <motion.div variants={itemVariants} style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                width: '100%',
-                                marginBottom: isDesktop ? '1.5rem' : isTablet ? '1.25rem' : '1rem',
-                                gap: isDesktop ? '0.1rem' : isTablet ? '0.6rem' : '0.5rem',
-                            }}>
-                                <h2 style={{
-                                    margin: 0,
-                                    lineHeight: 1,
-                                    fontWeight: 400,
-                                    display: 'inline-block',
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                }}>
-                                    <span style={{
-                                        fontFamily: RETROICA,
-                                        fontSize: isDesktop ? 'clamp(2rem, 3.5vw, 4.5rem)' : isTablet ? 'clamp(1.8rem, 5vw, 3.5rem)' : 'clamp(1.5rem, 7vw, 2.8rem)',
-                                        letterSpacing: '-0.02em',
-                                        color: '#FFFFFF',
-                                        textTransform: 'lowercase',
-                                        fontWeight: 400,
-                                        textShadow: `
-                                            0 0 8px rgba(255, 165, 0, 0.5),
-                                            0 0 16px rgba(255, 165, 0, 0.35),
-                                            0 0 30px rgba(255, 165, 0, 0.25),
-                                            0 0 50px rgba(255, 165, 0, 0.15),
-                                            0 0 70px rgba(255, 165, 0, 0.08)
-                                        `,
-                                    }}>
-                                        about us
-                                    </span>
-                                    <span style={{
-                                        fontFamily: RETROICA,
-                                        fontSize: isDesktop ? 'clamp(2rem, 3.5vw, 4.5rem)' : isTablet ? 'clamp(1.8rem, 5vw, 3.5rem)' : 'clamp(1.5rem, 7vw, 2.8rem)',
-                                        color: '#FFFFFF',
-                                        fontWeight: 400,
-                                        textShadow: `
-                                            0 0 8px rgba(255, 165, 0, 0.5),
-                                            0 0 16px rgba(255, 165, 0, 0.35),
-                                            0 0 30px rgba(255, 165, 0, 0.25),
-                                            0 0 50px rgba(255, 165, 0, 0.15),
-                                            0 0 70px rgba(255, 165, 0, 0.08)
-                                        `,
-                                    }}>
-                                        .
-                                    </span>
-                                </h2>
-
-                                {/* Gradient underline - matching Team/Portfolio style */}
-                                <div style={{
-                                    position: 'relative',
-                                    width: '100%',
-                                    maxWidth: '500px',
-                                    height: '3px',
-                                    background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%)',
-                                    borderRadius: '1px',
-                                    boxShadow: '0 2px 8px rgba(255, 165, 0, 0.12)',
-                                }} />
-                            </motion.div>
-
-                            {/* Body Text */}
+                            {/* Inner Body Text container */}
                             <div
-                                className={clsx(
-                                    'flex flex-col leading-relaxed text-text/90 text-justify mx-auto w-full',
-                                    bodySize
-                                )}
+                                className="flex flex-col text-text/90 mx-auto w-full my-auto text-justify"
                                 style={{
+                                    ...bodySizeStyle,
                                     fontFamily: RETROICA,
                                     fontWeight: 100,
                                     letterSpacing: '0.02em',
                                     WebkitFontSmoothing: 'antialiased',
                                     ...(isDesktop ? {
                                         paintOrder: 'stroke fill',
-                                        WebkitTextStroke: '0.5px rgba(250, 204, 21, 0.5)',
+                                        WebkitTextStroke: '0.1px rgba(250, 204, 21, 0.4)',
                                     } : {}),
-                                    // One line gap between paragraphs
-                                    gap: isDesktop ? '0.65rem' : isTablet ? '0.75rem' : '0.6rem'
+                                    gap: isDesktop ? 'min(1.2vh, 1vw)' : isTablet ? 'min(1.5vh, 0.75rem)' : 'min(1.5vh, 0.6rem)'
                                 }}
                             >
                                 <motion.p variants={itemVariants}>
-                                    Aakrit Cinematic Solutions was born from a simple yet powerful thought ΓÇö to contribute to India's animation and film industry and show the world its true creative strength. What began as a spark has now evolved into a mission: to build a full-spectrum production house that excels in movies, animation, VFX, 3D visualization, editing, and every craft that brings imagination to life.
+                                    Aakrit Cinematic Solutions was born from a simple yet powerful thought — to contribute to India's animation and film industry and show the world its true creative strength. What began as a spark has now evolved into a mission: to build a full-spectrum production house that excels in movies, animation, VFX, 3D visualization, editing, and every craft that brings imagination to life.
                                 </motion.p>
 
                                 <motion.p variants={itemVariants}>
@@ -187,34 +197,30 @@ const About = ({ id = 'about', className }: AboutProps) => {
                                 </motion.p>
 
                                 <motion.p variants={itemVariants}>
-                                    We are architects of imagination, designers of emotion, and creators of immersive experiences. Our vision is bold: To place Indian animation and production on the global map, proving that our industry is not just evolving ΓÇö it is roaring with potential and brilliance.
+                                    We are architects of imagination, designers of emotion, and creators of immersive experiences. Our vision is bold: To place Indian animation and production on the global map, proving that our industry is not just evolving — it is roaring with potential and brilliance.
                                 </motion.p>
 
                                 <motion.p variants={itemVariants}>
-                                    At Aakrit Cinematic Solutions, every frame is creation, every project is passion, and every story is a new possibility. From the smallest detail to the final output ΓÇö excellence is non-negotiable.
+                                    At Aakrit Cinematic Solutions, every frame is creation, every project is passion, and every story is a new possibility. From the smallest detail to the final output — excellence is non-negotiable.
                                 </motion.p>
 
                                 {/* Taglines - Extra spacing to differentiate */}
                                 <motion.div
                                     variants={itemVariants}
                                     className={clsx(
-                                        "text-center w-full",
-                                        isDesktop ? "mt-[40px]" : isTablet ? "mt-[30px]" : "mt-[16px]"
+                                        "text-center w-full flex-shrink-0",
+                                        isDesktop ? "mt-[min(2vh,1.5vw)]" : isTablet ? "mt-[min(3vh,20px)]" : "mt-[min(2vh,12px)]"
                                     )}
                                 >
                                     <div
-                                        className={clsx(
-                                            'flex flex-col text-tagline font-normal italic items-center',
-                                            taglineSize,
-                                            isTablet ? 'gap-y-4' : 'gap-y-1'
-                                        )}
-                                        style={{ fontFamily: RETROICA, color: '#000000' }}
+                                        className="flex flex-col text-tagline font-normal italic items-center"
+                                        style={{ ...taglineSizeStyle, fontFamily: RETROICA, color: '#000000', gap: isTablet ? '0.75rem' : '0.4rem' }}
                                     >
                                         <p>This is Aakrit.</p>
                                         <p>Bringing ideas to life.</p>
                                         <p>Pure Cinematic Creation.</p>
                                     </div>
-                                    <div className="h-[2px] w-full max-w-[300px] mx-auto bg-[#FEA800]/20 mt-4 md:mt-8" />
+                                    <div className="h-[2px] w-full max-w-[200px] mx-auto bg-[#FEA800]/20 mt-3 md:mt-4" />
                                 </motion.div>
                             </div>
                         </div>

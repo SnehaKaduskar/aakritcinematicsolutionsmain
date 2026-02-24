@@ -84,14 +84,16 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                     our team.
                 </h2>
 
-                {/* Decorative accent line — same as other pages */}
+                {/* Glowing accent line — same as other pages */}
                 <div
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 mt-2"
                     style={{
-                        width: 'clamp(280px, 60vw, 900px)',
+                        position: 'relative',
+                        width: 'clamp(280px, 60vw, 500px)',
                         height: '3px',
-                        background: 'linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.8), transparent)',
+                        background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%)',
                         borderRadius: '9999px',
+                        boxShadow: '0 2px 8px rgba(255, 165, 0, 0.12)',
                     }}
                 />
             </header>
@@ -99,7 +101,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
             {/* ── Cards grid ── */}
             <div style={{
                 width: '100%',
-                maxWidth: isDesktop ? '1050px' : isTablet ? '480px' : '320px',
+                maxWidth: isDesktop ? 'min(80vw, 1600px)' : isTablet ? '480px' : '320px',
                 position: 'relative',
                 zIndex: 30,
                 boxSizing: 'border-box',
@@ -198,10 +200,10 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'center',
                                                     maskImage: isHovered
-                                                        ? `radial-gradient(circle 200px at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        ? `radial-gradient(circle 500px at ${cardPointer[index] ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index] ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
                                                         : 'none',
                                                     WebkitMaskImage: isHovered
-                                                        ? `radial-gradient(circle 200px at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        ? `radial-gradient(circle 500px at ${cardPointer[index] ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index] ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
                                                         : 'none',
                                                     opacity: isHovered ? 1 : 0,
                                                     transition: 'opacity 0.4s ease-out',
