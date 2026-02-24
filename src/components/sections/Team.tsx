@@ -6,6 +6,7 @@ import ChiragSvg from '../../assets/Team/CHIRAG-01.svg';
 import ParasSvg from '../../assets/Team/PARAS-01.svg';
 import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
 import RetroicaFont from '../../assets/fonts/Retroica.ttf';
+const RETROICA = '"Retroica", Georgia, serif';
 
 const teamMembers = [
     { id: 1, name: 'URvi SHAH', image: UrviSvg },
@@ -77,7 +78,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                         color: '#ffffffff',
                         paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
                         letterSpacing: '0.12em',
-                        fontFamily: 'Retroica, sans-serif',
+                        fontFamily: RETROICA,
                     }}
                 >
                     our team.
@@ -89,7 +90,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                     style={{
                         width: 'clamp(280px, 60vw, 900px)',
                         height: '3px',
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+                        background: 'linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.8), transparent)',
                         borderRadius: '9999px',
                     }}
                 />
