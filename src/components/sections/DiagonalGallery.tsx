@@ -14,7 +14,7 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
 
   // Triple items for extremely smooth infinite scroll
   const images = [...baseImages, ...baseImages, ...baseImages];
-  const itemHeight = 300; // base height
+  const itemHeight = 400; // base height
   const gap = 128; // gap-32 (128px)
   const totalHeight = (itemHeight + gap) * baseImages.length;
 
@@ -37,7 +37,7 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
         {images.map((src, index) => (
           <div
             key={index}
-            className="w-[240px] h-[240px] md:w-[300px] md:h-[300px] flex-shrink-0 rounded-[1.25rem] overflow-hidden shadow-2xl relative group"
+            className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] flex-shrink-0 rounded-[1.25rem] overflow-hidden shadow-2xl relative group"
           >
             <img
               src={src}

@@ -104,8 +104,8 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
 
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent pointer-events-none z-1" />
 
-            <div className="w-full px-8 md:px-16 relative z-10">
-                <div className="w-full max-w-[450px] md:max-w-[600px]">
+            <div className="w-full h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center">
+                <div className="w-full max-w-[450px] md:max-w-[550px]">
 
                     {/* Eyebrow + Heading */}
                     <motion.div

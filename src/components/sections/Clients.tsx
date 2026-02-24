@@ -52,8 +52,8 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     display: flex;
                     flex-shrink: 0;
                     align-items: center;
-                    gap: 6rem;
-                    padding-right: 6rem;
+                    gap: 10rem;
+                    padding-right: 10rem;
                 }
                 .client-logo {
                     height: 2.8rem; 
@@ -191,16 +191,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 <div className="mx-auto w-[72%] mt-[4vh]  max-w-6xl">
                     <div className="relative h-[80px] md:h-[110px] bg-[#f59e0b] px-12 rounded-[50px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
-                            <div className="clients-grid logo-animate">
-                                {LOGO_DATA.map((logo, index) => (
-                                    <img key={`a-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
-                                ))}
-                            </div>
-                            <div className="clients-grid logo-animate">
-                                {LOGO_DATA.map((logo, index) => (
-                                    <img key={`b-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
-                                ))}
-                            </div>
+                            {/* Duplicate grids ensure there are no empty gaps when looping */}
+                            {[0, 1, 2, 3, 4, 5].map((i) => (
+                                <div key={`grid-${i}`} className="clients-grid logo-animate" aria-hidden={i > 0}>
+                                    {LOGO_DATA.map((logo, index) => (
+                                        <img key={`${i}-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
+                                    ))}
+                                </div>
+                            ))}
                         </div>
 
                     </div>
