@@ -1,5 +1,16 @@
 import { useEffect, useRef } from 'react';
 
+import vfxIcon from '../../assets/Icons For_services/VFX-01.svg';
+import animationIcon from '../../assets/Icons For_services/ANIMATION-01.svg';
+import modellingIcon from '../../assets/Icons For_services/3D modeling-01.svg';
+import walkthroughIcon from '../../assets/Icons For_services/WALKTHROUGH-01.svg';
+import packshotIcon from '../../assets/Icons For_services/Product packshot-01.svg';
+import dcFilmsIcon from '../../assets/Icons For_services/Digital Films-01.svg';
+import editingIcon from '../../assets/Icons For_services/Editing-01.svg';
+import preVisIcon from '../../assets/Icons For_services/Pre_visuals-01.svg';
+import layoutAnimIcon from '../../assets/Icons For_services/Layout_anim-01.svg';
+import storyBoardingIcon from '../../assets/Icons For_services/Storyboarding-01.svg';
+
 interface ServicesProps {
     id?: string;
     className?: string;
@@ -10,53 +21,63 @@ const services = [
         id: 'vfx',
         title: 'VFX',
         description: 'Cinematic visual effects that bring imagination to life.',
+        icon: vfxIcon,
     },
     {
         id: 'animation',
         title: 'Animation',
         subtitle: <>2D <span style={{ fontFamily: 'Special_Gothic_Expanded_One, sans-serif' }}>&</span> 3D</>,
         description: <>Fluid 2D and immersive 3D animations crafted with precision.</>,
+        icon: animationIcon,
     },
     {
         id: '3d-modelling',
         title: '3D Modelling',
         description: 'Hyper-realistic 3D models for any creative or commercial need.',
+        icon: modellingIcon,
     },
     {
         id: 'arch-walkthrough',
         title: 'Architectural Walkthrough',
         description: 'Stunning virtual walkthroughs of architectural designs.',
+        icon: walkthroughIcon,
     },
     {
         id: 'packshot',
         title: 'Product Packshot',
         description: 'High-impact product visualisation for brands and marketing.',
+        icon: packshotIcon,
     },
     {
         id: 'dc-films',
         title: <>Digital <span style={{ fontFamily: 'Special_Gothic_Expanded_One, sans-serif' }}>&</span> Corporate Films</>,
         description: 'Compelling digital and corporate film productions.',
+        icon: dcFilmsIcon,
     },
     {
         id: 'editing',
         title: 'Editing',
         description: 'Precise and creative post-production editing solutions.',
+        icon: editingIcon,
     },
     {
         id: 'pre-vis',
         title: 'Pre-Visualisation',
         description: 'Detailed pre-vis to plan and perfect every shot.',
+        icon: preVisIcon,
     },
     {
         id: 'layout-anim',
         title: 'Layout Animation',
         description: 'Dynamic layout animations that define visual storytelling.',
+        icon: layoutAnimIcon,
     },
     {
         id: 'story-boarding',
         title: 'Story Boarding',
         subtitle: 'and Concept Art',
         description: 'Expressive storyboards and bold concept art creations.',
+        icon: storyBoardingIcon,
     },
 ];
 
@@ -144,10 +165,10 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                     style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(130px, 18vw, 200px), 1fr))',
-                        gap: 'clamp(0.5rem, 1.2vw, 1.2rem)',
+                        gap: 'clamp(1rem, 2.5vw, 2.5rem)',
                         width: '100%',
                         maxWidth: '1300px',
-                        padding: 'clamp(0.5rem, 1vh, 1rem) clamp(0.8rem, 3vw, 3rem) clamp(0.5rem, 1.5vh, 1.5rem)',
+                        padding: 'clamp(1rem, 2vh, 2rem) clamp(1rem, 4vw, 4rem) clamp(1.5rem, 3vh, 3rem)',
                         flex: 'none',
                         alignContent: 'center',
                     }}
@@ -171,7 +192,7 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                                 gap: 'clamp(0.3rem, 0.6vw, 0.6rem)',
                                 boxShadow: '0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
                                 position: 'relative',
-                                overflow: 'hidden',
+                                overflow: 'visible',
                             }}
                             onMouseEnter={(e) => {
                                 (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(254, 168, 0, 0.7)';
@@ -180,6 +201,21 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                                 (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255, 255, 255, 0.35)';
                             }}
                         >
+                            {/* Icon positioning half outside top-left */}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 'clamp(-30px, -4vw, -45px)',
+                                    left: 'clamp(5px, 1vw, 15px)',
+                                    width: 'clamp(30px, 3.5vw, 50px)',
+                                    height: 'clamp(30px, 3.5vw, 50px)',
+                                    zIndex: 10,
+                                    filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))',
+                                }}
+                            >
+                                <img src={service.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                            </div>
+
                             {/* Interior shine shimmer */}
                             <div
                                 style={{
@@ -191,6 +227,7 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                                     background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
                                     borderRadius: 'inherit',
                                     pointerEvents: 'none',
+                                    overflow: 'hidden', // constrain inside radius
                                 }}
                             />
 
