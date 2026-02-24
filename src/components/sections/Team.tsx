@@ -138,7 +138,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                         cursor: isDesktop ? 'pointer' : 'default',
                                         margin: '0 auto',
                                     }}
-                                    onMouseMove={isDesktop ? (e) => {
+                                    onPointerMove={isDesktop ? (e) => {
                                         const rect = e.currentTarget.getBoundingClientRect();
                                         setCardPointer((prev) => ({
                                             ...prev,
@@ -148,8 +148,18 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                             }
                                         }));
                                     } : undefined}
-                                    onMouseEnter={isDesktop ? () => setHoveredIndex(index) : undefined}
-                                    onMouseLeave={isDesktop ? () => setHoveredIndex(null) : undefined}
+                                    onPointerEnter={isDesktop ? (e) => {
+                                        setHoveredIndex(index);
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        setCardPointer((prev) => ({
+                                            ...prev,
+                                            [index]: {
+                                                x: e.clientX - rect.left,
+                                                y: e.clientY - rect.top
+                                            }
+                                        }));
+                                    } : undefined}
+                                    onPointerLeave={isDesktop ? () => setHoveredIndex(null) : undefined}
                                     whileHover={isDesktop ? {
                                         scale: 1.05,
                                         zIndex: 50,
@@ -200,10 +210,10 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'center',
                                                     maskImage: isHovered
-                                                        ? `radial-gradient(circle 500px at ${cardPointer[index] ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index] ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        ? `radial-gradient(circle 400px at ${cardPointer[index]?.x !== undefined ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index]?.y !== undefined ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
                                                         : 'none',
                                                     WebkitMaskImage: isHovered
-                                                        ? `radial-gradient(circle 500px at ${cardPointer[index] ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index] ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        ? `radial-gradient(circle 400px at ${cardPointer[index]?.x !== undefined ? cardPointer[index].x + 'px' : '50%'} ${cardPointer[index]?.y !== undefined ? cardPointer[index].y + 'px' : '50%'}, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
                                                         : 'none',
                                                     opacity: isHovered ? 1 : 0,
                                                     transition: 'opacity 0.4s ease-out',

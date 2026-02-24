@@ -37,9 +37,9 @@ const About = ({ id = 'about', className }: AboutProps) => {
         }
     }, []);
 
-    /* Safe-zone constants (px) — navbar top + mascot bottom */
-    const navH = isDesktop ? 100 : isTablet ? 120 : 64;
-    const mascotH = isDesktop ? 160 : isTablet ? 140 : 100;
+    /* Safe-zone constants — smoothly shrink safe zones if screen is extremely short (like 720p small laptops) */
+    const safeNav = isDesktop ? 'clamp(70px, 10vh, 100px)' : isTablet ? '100px' : '64px';
+    const safeMascot = isDesktop ? 'clamp(100px, 16vh, 160px)' : isTablet ? '120px' : '90px';
 
     // Pure relative units to ensure it NEVER overflows visually and always looks uniform
     const paddingX = isDesktop ? 'min(3vw, 3vh)' : 'min(6vw, 1.5rem)';
@@ -47,16 +47,16 @@ const About = ({ id = 'about', className }: AboutProps) => {
 
     // Inline styles ensure CSS min()/clamp() functions are parsed flawlessly unconditionally
     const bodySizeStyle = isDesktop
-        ? { fontSize: 'min(1vw, 1.4vh)', lineHeight: 'min(1.6vw, 2.2vh)' }
+        ? { fontSize: 'clamp(10px, min(1.3vw, 1.8vh), 16px)', lineHeight: 'clamp(14px, min(1.9vw, 2.6vh), 24px)' }
         : isTablet
             ? { fontSize: 'min(2vw, 2.2vh)', lineHeight: 'min(3.2vw, 3vh)' }
-            : { fontSize: 'min(3.5vw, 1.4vh)', lineHeight: 'min(5vw, 2.1vh)' };
+            : { fontSize: 'min(3vw, 1.3vh)', lineHeight: 'min(4.5vw, 1.8vh)' };
 
     const taglineSizeStyle = isDesktop
-        ? { fontSize: 'min(1vw, 1.4vh)' }
+        ? { fontSize: 'clamp(10px, min(1.3vw, 1.8vh), 16px)' }
         : isTablet
             ? { fontSize: 'min(2vw, 2.2vh)' }
-            : { fontSize: 'min(3.5vw, 1.5vh)' };
+            : { fontSize: 'min(3vw, 1.4vh)' };
 
     return (
         <section
@@ -68,8 +68,8 @@ const About = ({ id = 'about', className }: AboutProps) => {
             style={{
                 height: '100dvh', // Strictly lock it
                 boxSizing: 'border-box',
-                paddingTop: isDesktop ? `calc(${navH}px + 4vh)` : `calc(${navH}px + 2vh)`,
-                paddingBottom: isDesktop ? `calc(${mascotH}px + 4vh)` : `calc(${mascotH}px + 2vh)`,
+                paddingTop: isDesktop ? `calc(${safeNav} + clamp(3vh, 3vh, 60px))` : `calc(${safeNav} + 1vh)`,
+                paddingBottom: isDesktop ? `calc(${safeMascot} + clamp(3vh, 3vh, 60px))` : `calc(${safeMascot} + 1vh)`,
                 paddingLeft: isDesktop ? '5vw' : '1.5rem',
                 paddingRight: isDesktop ? '5vw' : '1.5rem',
             }}
@@ -77,9 +77,9 @@ const About = ({ id = 'about', className }: AboutProps) => {
             <div
                 className="w-full relative z-10 flex flex-col items-center justify-center mx-auto"
                 style={{
-                    maxWidth: isDesktop ? 'min(40vw, 85vh)' : isTablet ? '70vw' : '90vw',
+                    maxWidth: isDesktop ? 'min(50vw, 800px)' : isTablet ? '70vw' : '90vw',
                     height: '100%',
-                    maxHeight: '100%',
+                    maxHeight: isDesktop ? '1100px' : '100%',
                 }}
             >
                 <motion.div
@@ -93,6 +93,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                         maxHeight: '100%',
                         display: 'flex',
                         flexDirection: 'column',
+                        justifyContent: 'center',
                     }}
                 >
                     {/* Header inline (same as Portfolio/Team) */}
@@ -107,7 +108,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                         }}>
                             <span style={{
                                 fontFamily: RETROICA,
-                                fontSize: isDesktop ? 'min(4vw, 7vh)' : 'clamp(1.5rem, min(8vw, 5vh), 2.5rem)',
+                                fontSize: isDesktop ? 'clamp(1.5rem, min(4.5vw, 6vh), 4.5rem)' : 'clamp(1rem, min(6vw, 4vh), 2rem)',
                                 letterSpacing: '-0.02em',
                                 color: '#FFFFFF',
                                 textTransform: 'lowercase',
@@ -124,7 +125,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                             </span>
                             <span style={{
                                 fontFamily: RETROICA,
-                                fontSize: isDesktop ? 'min(4vw, 7vh)' : 'clamp(1.5rem, min(8vw, 5vh), 2.5rem)',
+                                fontSize: isDesktop ? 'clamp(1.5rem, min(4.5vw, 6vh), 4.5rem)' : 'clamp(1rem, min(6vw, 4vh), 2rem)',
                                 color: '#FFFFFF',
                                 fontWeight: 400,
                                 textShadow: `
@@ -154,11 +155,12 @@ const About = ({ id = 'about', className }: AboutProps) => {
                     {/* Glassmorphism card container */}
                     <motion.div
                         variants={itemVariants}
-                        className="w-full relative flex flex-col items-stretch flex-1 min-h-0"
+                        className="w-full relative flex flex-col items-stretch flex-shrink-0"
                     >
                         <div
-                            className="flex flex-col relative z-10 w-full h-full max-h-full"
+                            className="flex flex-col relative z-10 w-full max-h-full"
                             style={{
+                                height: 'max-content',
                                 paddingLeft: paddingX,
                                 paddingRight: paddingX,
                                 paddingTop: paddingY,
@@ -185,7 +187,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                                         paintOrder: 'stroke fill',
                                         WebkitTextStroke: '0.1px rgba(250, 204, 21, 0.4)',
                                     } : {}),
-                                    gap: isDesktop ? 'min(1.2vh, 1vw)' : isTablet ? 'min(1.5vh, 0.75rem)' : 'min(1.5vh, 0.6rem)'
+                                    gap: isDesktop ? 'min(1.2vh, 1vw)' : isTablet ? 'min(1.5vh, 0.75rem)' : 'min(1vh, 0.3rem)'
                                 }}
                             >
                                 <motion.p variants={itemVariants}>
@@ -209,12 +211,12 @@ const About = ({ id = 'about', className }: AboutProps) => {
                                     variants={itemVariants}
                                     className={clsx(
                                         "text-center w-full flex-shrink-0",
-                                        isDesktop ? "mt-[min(2vh,1.5vw)]" : isTablet ? "mt-[min(3vh,20px)]" : "mt-[min(2vh,12px)]"
+                                        isDesktop ? "mt-[min(2vh,1.5vw)]" : isTablet ? "mt-[min(3vh,20px)]" : "mt-[min(1vh,8px)]"
                                     )}
                                 >
                                     <div
                                         className="flex flex-col text-tagline font-normal italic items-center"
-                                        style={{ ...taglineSizeStyle, fontFamily: RETROICA, color: '#000000', gap: isTablet ? '0.75rem' : '0.4rem' }}
+                                        style={{ ...taglineSizeStyle, fontFamily: RETROICA, color: '#000000', gap: isTablet ? '0.75rem' : '0.2rem' }}
                                     >
                                         <p>This is Aakrit.</p>
                                         <p>Bringing ideas to life.</p>
