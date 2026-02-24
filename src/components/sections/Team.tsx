@@ -101,7 +101,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
             {/* ── Cards grid ── */}
             <div style={{
                 width: '100%',
-                maxWidth: isDesktop ? 'min(80vw, 1600px)' : isTablet ? '480px' : '320px',
+                maxWidth: isDesktop ? 'clamp(1050px, 50vw, 1300px)' : isTablet ? '480px' : '320px',
                 position: 'relative',
                 zIndex: 30,
                 boxSizing: 'border-box',
