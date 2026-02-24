@@ -8,37 +8,11 @@ import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
 import RetroicaFont from '../../assets/fonts/Retroica.ttf';
 
 const teamMembers = [
-    {
-        id: 1,
-        name: 'URvi SHAH',
-        role: 'Founder & Studio Head',
-        description: "Urvi leads the studio with a focus on cross-disciplinary innovation and creative strategy. She orchestrates complex projects from concept to delivery, ensuring every piece reflects Aakrit's core artistic values.",
-        image: UrviSvg,
-    },
-    {
-        id: 2,
-        name: 'CHIRAG K. MALI',
-        role: 'Creative Head',
-        description: 'Chirag specializes in visual narrative and aesthetic direction. He works closely with our artists to refine the visual language of our productions, pushing the boundaries of cinematic storytelling through meticulous art direction.',
-        image: ChiragSvg,
-    },
-    {
-        id: 3,
-        name: 'PARAS SHARMA',
-        role: '3D Generalist',
-        description: 'Paras bridges the gap between technical execution and artistic vision. He masters lighting, texturing, and character design to build immersive 3D environments that feel alive and emotionally resonant within the frame.',
-        image: ParasSvg,
-    },
-    {
-        id: 4,
-        name: 'RUPESH GUPTA',
-        role: 'Multimedia Artist',
-        description: 'Rupesh explores the intersection of digital media and traditional art. He leverages cutting-edge technology to create dynamic multimedia experiences, focusing on interactivity and high-impact visual effects for our global audience.',
-        image: RupeshSvg,
-    },
+    { id: 1, name: 'URvi SHAH', image: UrviSvg },
+    { id: 2, name: 'CHIRAG K. MALI', image: ChiragSvg },
+    { id: 3, name: 'PARAS SHARMA', image: ParasSvg },
+    { id: 4, name: 'RUPESH GUPTA', image: RupeshSvg },
 ];
-
-const RETROICA = '"Retroica", Georgia, serif';
 
 const Team = ({ id = 'our team' }: { id?: string }) => {
     const isDesktop = useMediaQuery('(min-width: 1024px)');
@@ -58,8 +32,8 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
     }, []);
 
     /* Safe-zone constants (px) — navbar top + mascot bottom */
-    const navH = isDesktop ? 100 : isTablet ? 120 : 90; // navbar + breathing room per breakpoint
-    const mascotH = isDesktop ? 160 : 110; // mascot 150/100 + small buffer
+    const navH = isDesktop ? 100 : isTablet ? 120 : 90;
+    const mascotH = isDesktop ? 160 : 110;
 
     return (
         <section
@@ -87,7 +61,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
             <header style={{
                 position: 'relative',
                 zIndex: 20,
-                marginBottom: isDesktop ? '3vh' : isTablet ? '1.5vh' : '2vh',
+                marginBottom: isDesktop ? '2vh' : isTablet ? '2vh' : '2vh',
                 width: '100%',
                 maxWidth: '100%',
                 display: 'flex',
@@ -121,7 +95,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                 />
             </header>
 
-            {/* ── Cards grid — flex-constrained so it never bleeds behind mascot ── */}
+            {/* ── Cards grid ── */}
             <div style={{
                 width: '100%',
                 maxWidth: isDesktop ? '1050px' : isTablet ? '480px' : '320px',
@@ -129,10 +103,6 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                 zIndex: 30,
                 boxSizing: 'border-box',
                 margin: '0 auto',
-                flex: '1 1 0%',
-                minHeight: 0,
-                display: 'flex',
-                alignItems: isDesktop ? 'center' : 'flex-start',
             }}>
                 <div ref={containerRef} style={{
                     position: 'relative',
@@ -183,7 +153,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                     } : {}}
                                     transition={{ duration: 0.3, ease: 'easeOut' }}
                                 >
-                                    {/* Card container with overflow hidden */}
+                                    {/* Card container */}
                                     <div style={{
                                         position: 'relative',
                                         width: '100%',
