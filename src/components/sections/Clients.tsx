@@ -31,14 +31,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
         <section
             id={id}
             className={clsx(
-                "relative w-full min-h-screen bg-primary flex flex-col pt-20",
+                "relative w-full min-h-screen bg-primary flex flex-col items-center justify-center py-[72px] lg:py-[88px]",
                 className
             )}
         >
             <style>{`
                 @keyframes marquee {
                     0%   { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
+                    100% { transform: translateX(-100%); }
                 }
                 .logo-animate {
                     animation: marquee 30s linear infinite;
@@ -68,7 +68,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 .mobile-video-grid { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem 1.5rem 1rem; }
 
                 @media (min-width: 768px) {
-                    .desktop-video-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 3rem; width: 100%; overflow-x: auto; padding: 0 5vw 2.5rem 5vw; scrollbar-width: none; }
+                    .desktop-video-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3rem; width: 100%; overflow-x: auto; padding: 0 0 72px 0; scrollbar-width: none; overflow-y: visible; }
                     .desktop-video-row::-webkit-scrollbar { display: none; }
                     .mobile-video-grid { display: none !important; }
                     .client-logo { height: 3.5rem; }
@@ -81,19 +81,39 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             </div>
 
             {/* Heading + Videos */}
-            <div className="relative z-10 w-full mb-10">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 mb-10">
                 <div className="flex flex-col items-center text-center">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="font-retrocia text-[clamp(2.5rem,5vw,4rem)] font-bold tracking-tighter text-black mb-12"
-                    >
-                        Client Feedback
-                    </motion.h2>
+                    <div className="inline-flex flex-col items-stretch mb-[clamp(1.2rem,3vh,3rem)]">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
+                            style={{
+                                fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                                textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+                                color: '#ffffffff',
+                                paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                                letterSpacing: '0.12em',
+                            }}
+                        >
+                            client feedback.
+                        </motion.h2>
+
+                        {/* Decorative accent line */}
+                        <div
+                            className="flex-shrink-0"
+                            style={{
+                                width: '100%',
+                                height: '3px',
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+                                borderRadius: '9999px',
+                            }}
+                        />
+                    </div>
 
                     {/* DESKTOP VIDEOS */}
-                    <div className="desktop-video-row !pb-32">
+                    <div className="desktop-video-row">
                         {VIDEO_DATA.map((video) => (
                             <div
                                 key={`desktop-${video.id}`}
@@ -160,7 +180,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             </div>
 
             {/* ── ORANGE PILL LOGO SCROLLER ── */}
-            <div className="relative z-10 w-full mt-30 bg-black py-16">
+            <div className="relative z-10 w-full mt-12 bg-black py-16">
                 <div className="px-[5vw] mb-8 text-center md:text-left">
                     <h3 className="text-white/20 text-3xl md:text-5xl font-bold tracking-tighter uppercase italic leading-none">
                         WE WORKED WITH
@@ -168,8 +188,8 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 </div>
 
                 {/* Orange Pill Container */}
-                <div className="mx-auto w-[72%] mt-[7vh]  max-w-6xl">
-                    <div className="relative h-24 md:h-32 bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] px-12 rounded-full flex items-center overflow-hidden shadow-[0_15px_45px_rgba(245,158,11,0.25)] border border-white/20">
+                <div className="mx-auto w-[72%] mt-[4vh]  max-w-6xl">
+                    <div className="relative h-[80px] md:h-[110px] bg-[#f59e0b] px-12 rounded-[50px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
                             <div className="clients-grid logo-animate">
                                 {LOGO_DATA.map((logo, index) => (

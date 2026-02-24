@@ -10,7 +10,6 @@ import Projects from '../components/sections/Projects';
 import Clients from '../components/sections/Clients';
 import Team from '../components/sections/Team';
 import Contact from '../components/sections/Contact';
-import CanvasCursor from '../components/ui/CanvasCursor';
 import useMediaQuery from '../hooks/useMediaQuery';
 
 interface HomeExperienceProps {
@@ -55,8 +54,6 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
 
     return (
         <div className="bg-background text-text antialiased lg:overflow-hidden min-h-screen relative">
-            <CanvasCursor />
-
             <SeamlessBackground scrollerRef={scrollerRef} isVisible={showBackground} />
             <HorizontalScrollContainer
                 scrollerRef={scrollerRef}

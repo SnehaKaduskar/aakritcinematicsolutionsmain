@@ -1,22 +1,19 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import UrviSvg from '../../assets/Team/URvi-01.svg';
 import ChiragSvg from '../../assets/Team/CHIRAG-01.svg';
 import ParasSvg from '../../assets/Team/PARAS-01.svg';
 import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
-// Asset 2@4x.png path needs verification, assuming it's in assets root or similar
-import WatermarkLogo from '../../assets/Aakrit_logo_02-01.svg';
+import RetroicaFont from '../../assets/fonts/Retroica.ttf';
 
 const teamMembers = [
     {
         id: 1,
         name: 'URvi SHAH',
         role: 'Founder & Studio Head',
-        description: 'Urvi leads the studio with a focus on cross-disciplinary innovation and creative strategy. She orchestrates complex projects from concept to delivery, ensuring every piece reflects Aakrit\'s core artistic values.',
+        description: "Urvi leads the studio with a focus on cross-disciplinary innovation and creative strategy. She orchestrates complex projects from concept to delivery, ensuring every piece reflects Aakrit's core artistic values.",
         image: UrviSvg,
-        borderColor: '#FEA800',
-        gradient: 'linear-gradient(145deg, rgba(254, 168, 0, 0.95), rgba(0, 0, 0, 0.85))',
     },
     {
         id: 2,
@@ -24,8 +21,6 @@ const teamMembers = [
         role: 'Creative Head',
         description: 'Chirag specializes in visual narrative and aesthetic direction. He works closely with our artists to refine the visual language of our productions, pushing the boundaries of cinematic storytelling through meticulous art direction.',
         image: ChiragSvg,
-        borderColor: '#FEA800',
-        gradient: 'linear-gradient(160deg, rgba(254, 168, 0, 0.95), rgba(0, 0, 0, 0.85))',
     },
     {
         id: 3,
@@ -33,8 +28,6 @@ const teamMembers = [
         role: '3D Generalist',
         description: 'Paras bridges the gap between technical execution and artistic vision. He masters lighting, texturing, and character design to build immersive 3D environments that feel alive and emotionally resonant within the frame.',
         image: ParasSvg,
-        borderColor: '#FEA800',
-        gradient: 'linear-gradient(150deg, rgba(254, 168, 0, 0.95), rgba(0, 0, 0, 0.85))',
     },
     {
         id: 4,
@@ -42,207 +35,236 @@ const teamMembers = [
         role: 'Multimedia Artist',
         description: 'Rupesh explores the intersection of digital media and traditional art. He leverages cutting-edge technology to create dynamic multimedia experiences, focusing on interactivity and high-impact visual effects for our global audience.',
         image: RupeshSvg,
-        borderColor: '#FEA800',
-        gradient: 'linear-gradient(165deg, rgba(254, 168, 0, 0.95), rgba(0, 0, 0, 0.85))',
     },
 ];
 
-const Team = ({ id = 'team' }: { id?: string }) => {
+const RETROICA = '"Retroica", Georgia, serif';
+
+const Team = ({ id = 'our team' }: { id?: string }) => {
     const isDesktop = useMediaQuery('(min-width: 1024px)');
+    const isTablet = useMediaQuery('(min-width: 600px) and (max-width: 1023px)');
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [cardPointer, setCardPointer] = useState<Record<number, { x: number; y: number }>>({});
-    const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
 
-    const toggleFlip = (index: number) => {
-        if (!isDesktop) {
-            setFlippedIndex((prev) => (prev === index ? null : index));
+    useEffect(() => {
+        // Inject Retroica font
+        if (!document.getElementById('retroica-font-face')) {
+            const s = document.createElement('style');
+            s.id = 'retroica-font-face';
+            s.textContent = `@font-face { font-family: 'Retroica'; src: url('${RetroicaFont}') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }`;
+            document.head.appendChild(s);
         }
-    };
-
-    const handleLeave = () => {
-        setHoveredIndex(null);
-        setFlippedIndex(null);
-    };
-
-    const trackedItems = useMemo(() => teamMembers.slice(0, 4), []);
+    }, []);
 
     return (
         <section
             id={id}
-            className="min-h-[100dvh] w-full flex-shrink-0 bg-background text-text flex flex-col items-center justify-center relative px-4 sm:px-8 md:px-12 py-10 overflow-x-hidden"
+            style={{
+                height: '100vh',
+                width: '100%',
+                maxWidth: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+                padding: isDesktop ? '0 5vw 2vh' : isTablet ? '4vh 6vw' : '4vh 7vw',
+                flexShrink: 0,
+            }}
+            className="bg-background text-text"
         >
-            {/* Header Independent of Card Positioning */}
-            <header className="relative text-center z-20 mb-[7vh] md:mb-[6vh]">
-                <h1
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-tight"
-                >
-                    Team
+            {/* ── Header with Retroica font, intense glow, gradient underline ── */}
+            <header style={{
+                position: 'relative',
+                zIndex: 20,
+                marginTop: isDesktop ? '-20px' : '0',
+                marginBottom: isDesktop ? '3vh' : isTablet ? '4vh' : '4vh',
+                width: '100%',
+                maxWidth: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: isDesktop ? '0.1rem' : isTablet ? '1rem' : '0.8rem',
+            }}>
+                <h1 style={{
+                    margin: 0,
+                    lineHeight: 1,
+                    fontWeight: 400,
+                    display: 'inline-block',
+                    whiteSpace: 'nowrap',
+                    position: 'relative',
+                }}>
+                    <span style={{
+                        fontFamily: RETROICA,
+                        fontSize: isDesktop ? 'clamp(3rem, 5.5vw, 7rem)' : isTablet ? 'clamp(2.5rem, 7vw, 5rem)' : 'clamp(2rem, 9vw, 4rem)',
+                        letterSpacing: '-0.02em',
+                        color: '#FFFFFF',
+                        textTransform: 'lowercase',
+                        fontWeight: 400,
+                        textShadow: `
+                            0 0 8px rgba(255, 165, 0, 0.5),
+                            0 0 16px rgba(255, 165, 0, 0.35),
+                            0 0 30px rgba(255, 165, 0, 0.25),
+                            0 0 50px rgba(255, 165, 0, 0.15),
+                            0 0 70px rgba(255, 165, 0, 0.08)
+                        `,
+                    }}>
+                        our team
+                    </span>
+                    <span style={{
+                        fontFamily: RETROICA,
+                        fontSize: isDesktop ? 'clamp(3rem, 5.5vw, 7rem)' : isTablet ? 'clamp(2.5rem, 7vw, 5rem)' : 'clamp(2rem, 9vw, 4rem)',
+                        color: '#FFFFFF',
+                        fontWeight: 400,
+                        textShadow: `
+                            0 0 8px rgba(255, 165, 0, 0.5),
+                            0 0 16px rgba(255, 165, 0, 0.35),
+                            0 0 30px rgba(255, 165, 0, 0.25),
+                            0 0 50px rgba(255, 165, 0, 0.15),
+                            0 0 70px rgba(255, 165, 0, 0.08)
+                        `,
+                    }}>
+                        .
+                    </span>
                 </h1>
+
+
+                {/* Clean underline with subtle warm glow - matching portfolio style */}
+                <div style={{
+                    position: 'relative',
+                    width: isDesktop ? '80%' : isTablet ? '70%' : '60%',
+                    maxWidth: '900px',
+                    height: '3px',
+                    background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%)',
+                    borderRadius: '1px',
+                    boxShadow: '0 2px 8px rgba(255, 165, 0, 0.12)',
+                }} />
             </header>
 
-            <div className="w-full max-w-[1350px] relative mx-auto z-30">
-                {/* Chroma Grid Interaction Area */}
-                <div
-                    ref={containerRef}
-                    className="relative w-full"
-                    onMouseLeave={handleLeave}
-                >
-                    <div
-                        className={`relative z-10 ${isDesktop ? 'grid' : 'flex items-center overflow-x-auto snap-x snap-mandatory py-36 px-[7%] scrollbar-hide'}`}
-                        style={{
-                            gridTemplateColumns: isDesktop ? 'repeat(4, minmax(0, 1fr))' : 'none',
-                            gap: isDesktop ? '60px' : '16px',
-                        }}
-                    >
-                        {trackedItems.map((member, index) => {
-                            const isFlipped = flippedIndex === index;
+            {/* ── Cards grid ── */}
+            <div style={{
+                width: '100%',
+                maxWidth: isDesktop ? '1050px' : isTablet ? '420px' : '320px',
+                position: 'relative',
+                zIndex: 30,
+                boxSizing: 'border-box',
+                margin: '0 auto',
+            }}>
+                <div ref={containerRef} style={{
+                    position: 'relative',
+                    width: '100%',
+                    overflow: 'visible',
+                }}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: isDesktop ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)',
+                        gap: isDesktop ? '1.5rem' : isTablet ? '1rem' : '0.8rem',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        {teamMembers.map((member, index) => {
                             const isHovered = hoveredIndex === index;
-                            const hasHovered = hoveredIndex !== null;
 
                             return (
-                                <div
+                                <motion.div
                                     key={`${member.name}-${index}`}
-                                    className={`relative ${isDesktop ? 'w-full aspect-[4/5]' : 'min-w-[42vw] md:min-w-[35vw] aspect-[4/5] snap-center'} mx-auto transition-all duration-300`}
                                     style={{
-                                        perspective: isDesktop ? 'none' : '3000px',
-                                        zIndex: isHovered || isFlipped ? 50 : 1
+                                        position: 'relative',
+                                        width: '100%',
+                                        aspectRatio: '1080 / 1350',
+                                        height: 'auto',
+                                        borderRadius: isDesktop ? '12px' : '10px',
+                                        overflow: 'visible',
+                                        cursor: isDesktop ? 'pointer' : 'default',
+                                        margin: '0 auto',
                                     }}
+                                    onMouseMove={isDesktop ? (e) => {
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        setCardPointer((prev) => ({
+                                            ...prev,
+                                            [index]: {
+                                                x: e.clientX - rect.left,
+                                                y: e.clientY - rect.top
+                                            }
+                                        }));
+                                    } : undefined}
+                                    onMouseEnter={isDesktop ? () => setHoveredIndex(index) : undefined}
+                                    onMouseLeave={isDesktop ? () => setHoveredIndex(null) : undefined}
+                                    whileHover={isDesktop ? {
+                                        scale: 1.05,
+                                        zIndex: 50,
+                                    } : {}}
+                                    transition={{ duration: 0.3, ease: 'easeOut' }}
                                 >
-                                    {isDesktop ? (
-                                        /* Desktop Slide-out Layout */
-                                        <motion.div
-                                            className="w-full h-full relative"
-                                            animate={{
-                                                x: isHovered ? (index === 3 ? '-100%' : '-20%') : '0%',
-                                                filter: hasHovered && !isHovered ? 'blur(1.5px)' : 'blur(0px)',
-                                                opacity: hasHovered && !isHovered ? 0.6 : 1,
-                                                scale: hasHovered && !isHovered ? 0.96 : 1
-                                            }}
-                                            transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-                                        >
-                                            {/* SVG Card */}
-                                            <motion.div
-                                                className="absolute inset-0 w-full h-full cursor-pointer z-20"
-                                                onMouseMove={(event) => {
-                                                    const rect = event.currentTarget.getBoundingClientRect();
-                                                    setCardPointer((prev) => ({
-                                                        ...prev,
-                                                        [index]: {
-                                                            x: event.clientX - rect.left,
-                                                            y: event.clientY - rect.top,
-                                                        },
-                                                    }));
-                                                }}
-                                                onMouseEnter={() => setHoveredIndex(index)}
-                                            >
-                                                <div className="absolute inset-0 w-full h-full overflow-hidden rounded-[1.1rem]">
-                                                    <img
-                                                        src={member.image}
-                                                        alt={member.name}
-                                                        className="absolute inset-0 w-full h-full object-cover grayscale brightness-75 transition-all duration-700"
-                                                    />
-                                                    {/* Spotlight Effect */}
-                                                    <div
-                                                        className="absolute inset-0 w-full h-full pointer-events-none"
-                                                        style={{
-                                                            backgroundImage: `url(${member.image})`,
-                                                            backgroundSize: 'cover',
-                                                            backgroundPosition: 'center',
-                                                            maskImage: `radial-gradient(600px circle at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0.3) 60%, transparent 100%)`,
-                                                            WebkitMaskImage: `radial-gradient(600px circle at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0.3) 60%, transparent 100%)`,
-                                                            opacity: isHovered ? 1 : 0,
-                                                            transition: 'opacity 0.6s ease-out'
-                                                        }}
-                                                    />
-                                                </div>
-                                            </motion.div>
-
-                                            {/* Sliding Info Card */}
-                                            <motion.div
-                                                initial={{ x: '-10%', opacity: 0 }}
-                                                animate={{
-                                                    x: isHovered ? '70%' : '-10%',
-                                                    opacity: isHovered ? 1 : 0
-                                                }}
-                                                transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.05 }}
-                                                className="absolute top-[10%] left-0 z-10 rounded-[1.2rem] bg-[#0f0f0f]/95 flex flex-col justify-center items-center text-center shadow-2xl backdrop-blur-xl pointer-events-none"
+                                    {/* Card container with overflow hidden */}
+                                    <div style={{
+                                        position: 'relative',
+                                        width: '100%',
+                                        height: '100%',
+                                        borderRadius: isDesktop ? '12px' : '10px',
+                                        overflow: 'hidden',
+                                        boxShadow: isHovered
+                                            ? '0 10px 40px rgba(255, 165, 0, 0.4), 0 0 60px rgba(255, 165, 0, 0.2)'
+                                            : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                                        transition: 'box-shadow 0.3s ease',
+                                    }}>
+                                        {/* SVG Image */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            inset: 0,
+                                            overflow: 'hidden',
+                                        }}>
+                                            {/* Base grayscale image for desktop, colored for mobile/tablet */}
+                                            <img
+                                                src={member.image}
+                                                alt={member.name}
                                                 style={{
-                                                    width: '150%',
-                                                    height: '80%',
-                                                    padding: '8% 10%'
+                                                    position: 'absolute',
+                                                    inset: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                    filter: isDesktop
+                                                        ? 'grayscale(1) brightness(0.8)'
+                                                        : 'grayscale(0) brightness(1)',
+                                                    transition: 'filter 0.5s ease',
                                                 }}
-                                            >
-                                                <img
-                                                    src={WatermarkLogo}
-                                                    alt=""
-                                                    className="absolute inset-0 w-[60%] h-[60%] m-auto object-contain opacity-[0.03] pointer-events-none"
-                                                />
-                                                <div className="relative z-10 w-full space-y-4">
-                                                    <div className="space-y-1">
-                                                        <h3 className="text-[#F8F7F2] tracking-tighter leading-none text-3xl font-sans">
-                                                            {member.name}
-                                                        </h3>
-                                                        <p className="text-[#CEFE55] uppercase tracking-[0.25em] text-sm">
-                                                            {member.role}
-                                                        </p>
-                                                    </div>
-                                                    <div className="w-16 h-[2px] bg-white/10 mx-auto rounded-full" />
-                                                    <p className="text-[#F8F7F2]/80 font-sans leading-relaxed text-base text-justify px-2">
-                                                        {member.description}
-                                                    </p>
-                                                </div>
-                                            </motion.div>
-                                        </motion.div>
-                                    ) : (
-                                        /* Mobile Flip Layout */
-                                        <motion.div
-                                            className="w-full h-full relative cursor-pointer"
-                                            animate={{ rotateY: isFlipped ? 180 : 0 }}
-                                            transition={{ duration: 0.8, type: 'spring', damping: 20, stiffness: 60 }}
-                                            style={{ transformStyle: 'preserve-3d' }}
-                                            onClick={() => toggleFlip(index)}
-                                        >
-                                            <div className="absolute inset-0 w-full h-full backface-hidden z-20">
-                                                <div className="absolute inset-0 w-full h-full overflow-hidden rounded-[1.1rem]">
-                                                    <img src={member.image} alt={member.name} className="absolute inset-0 w-full h-full object-cover" />
-                                                </div>
-                                            </div>
-                                            <div className="absolute inset-0 w-full h-full rounded-[1.2rem] bg-[#0f0f0f] p-[5%] flex flex-col items-center justify-center backface-hidden shadow-2xl z-10 overflow-hidden" style={{ transform: 'rotateY(180deg)' }}>
-                                                <img src={WatermarkLogo} alt="" className="absolute inset-0 w-[80%] h-[80%] m-auto object-contain opacity-[0.02] pointer-events-none" />
-                                                <div className="w-full max-h-full flex flex-col justify-center items-center relative z-10">
-                                                    <div className="text-center mb-2">
-                                                        <h3 className="text-[#F8F7F2] tracking-tighter leading-[0.9] font-sans" style={{ fontSize: 'clamp(0.8rem, 3.8vw, 1.1rem)' }}>
-                                                            {member.name}
-                                                        </h3>
-                                                        <p className="text-[#CEFE55] uppercase tracking-[0.1em] mt-1" style={{ fontSize: 'clamp(0.5rem, 1.8vw, 0.6rem)' }}>
-                                                            {member.role}
-                                                        </p>
-                                                    </div>
-                                                    <div className="w-8 h-px bg-white/20 mx-auto mb-3" />
-                                                    <p
-                                                        className="text-[#F8F7F2]/90 font-sans text-justify leading-tight w-full px-1 overflow-y-auto max-h-[140px]"
-                                                        style={{
-                                                            fontSize: 'clamp(0.5rem, 2.2vw, 0.65rem)',
-                                                            hyphens: 'auto',
-                                                            WebkitHyphens: 'auto',
-                                                            wordBreak: 'break-word',
-                                                            textAlignLast: 'center'
-                                                        }}
-                                                    >
-                                                        {member.description}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </div>
+                                            />
+
+                                            {/* Desktop only: Color reveal on hover with radial gradient mask */}
+                                            {isDesktop && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    inset: 0,
+                                                    backgroundImage: `url(${member.image})`,
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                    maskImage: isHovered
+                                                        ? `radial-gradient(circle 200px at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        : 'none',
+                                                    WebkitMaskImage: isHovered
+                                                        ? `radial-gradient(circle 200px at ${cardPointer[index]?.x ?? 0}px ${cardPointer[index]?.y ?? 0}px, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%)`
+                                                        : 'none',
+                                                    opacity: isHovered ? 1 : 0,
+                                                    transition: 'opacity 0.4s ease-out',
+                                                    pointerEvents: 'none',
+                                                }} />
+                                            )}
+                                        </div>
+                                    </div>
+                                </motion.div>
                             );
                         })}
                     </div>
                 </div>
             </div>
-        </section >
+        </section>
     );
 };
 

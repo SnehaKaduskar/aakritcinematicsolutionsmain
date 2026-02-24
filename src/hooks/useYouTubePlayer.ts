@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 declare global {
     interface Window {
         onYouTubeIframeAPIReady: () => void;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         YT: any;
     }
 }
@@ -11,11 +12,14 @@ interface YouTubePlayerOptions {
     videoId: string;
     width?: string | number;
     height?: string | number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     playerVars?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     events?: any;
 }
 
 export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOptions) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const playerRef = useRef<any>(null);
     const [isReady, setIsReady] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -65,6 +69,7 @@ export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOpti
                         ...options.playerVars
                     },
                     events: {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         onReady: (event: any) => {
                             console.log("YouTube Player: Ready");
                             setIsReady(true);
@@ -75,6 +80,7 @@ export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOpti
                             }
                             if (options.events?.onReady) options.events.onReady(event);
                         },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         onStateChange: (event: any) => {
                             const state = event.data;
                             setIsPlaying(state === 1);
@@ -87,6 +93,7 @@ export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOpti
 
                             if (options.events?.onStateChange) options.events.onStateChange(event);
                         },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         onError: (event: any) => {
                             console.error("YouTube Player Error:", event.data);
                             if (options.events?.onError) options.events.onError(event);
@@ -117,9 +124,10 @@ export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOpti
                 playerRef.current = null;
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [containerId, options.videoId]); // Re-init if wrapper or video ID changes
 
-    const startProgressTracking = () => {
+    function startProgressTracking() {
         if (progressInterval.current) clearInterval(progressInterval.current);
         progressInterval.current = setInterval(() => {
             if (playerRef.current && playerRef.current.getCurrentTime) {
@@ -128,7 +136,7 @@ export const useYouTubePlayer = (containerId: string, options: YouTubePlayerOpti
         }, 1000);
     };
 
-    const stopProgressTracking = () => {
+    function stopProgressTracking() {
         if (progressInterval.current) {
             clearInterval(progressInterval.current);
             progressInterval.current = null;

@@ -9,6 +9,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Calisto';
+  src: url('./assets/fonts/Calisto.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Special_Gothic_Expanded_One';
+  src: url('./assets/fonts/SpecialGothicExpandedOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --font-primary: 'Retroica';
   font-family: var(--font-primary);
@@ -41,8 +55,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: #F2DD5E;
-  cursor: none;
-  /* Hide default cursor for custom cursor */
+
 }
 
 /* Hide scrollbars completely */
@@ -72,13 +85,7 @@ body::before {
   z-index: 50;
 }
 
-@media (max-width: 1023px) {
-  body {
-    overflow-y: auto;
-    min-height: 100vh;
-    cursor: auto;
-  }
-}
+
 
 /* Glass Card Effect */
 .glass-card {
@@ -144,4 +151,16 @@ body::before {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* Enforce Strict Horizontal Layout for Mobile Sections */
+.horizontal-scroller>section,
+.horizontal-scroller>* {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-direction: column !important;
 }

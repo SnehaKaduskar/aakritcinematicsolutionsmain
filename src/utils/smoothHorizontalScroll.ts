@@ -58,72 +58,88 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
             target = current; // Sync target to current so no jump
         }
 
+        // Let native horizontal scroll pass through if it's strictly a horizontal swipe/trackpad
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            return;
+        }
+
         // Map vertical wheel to horizontal scroll
         if (Math.abs(e.deltaY) > 0) {
             e.preventDefault();
             target += e.deltaY;
             // Clamp target to valid scroll range
-            target = Math.max(0, Math.min(container.scrollWidth - container.clientWidth, target));
+            const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+            target = Math.max(0, Math.min(maxScroll, target));
+
+            // Safety fallback if it becomes NaN
+            if (isNaN(target)) target = 0;
         }
     }
 
-    // Touch handlers for mobile
-    let touchStartY = 0;
-    let touchStartX = 0;
-
-    function onTouchStart(e: TouchEvent) {
-        // Cancel auto-scroll on touch
-        if (isAutoScrolling) {
-            isAutoScrolling = false;
-            target = current;
-        }
-        touchStartY = e.touches[0].clientY;
-        touchStartX = e.touches[0].clientX;
-    }
-
-    function onTouchMove(e: TouchEvent) {
-        const currentY = e.touches[0].clientY;
-        const currentX = e.touches[0].clientX;
-        const deltaY = touchStartY - currentY;
-        const deltaX = touchStartX - currentX;
-
-        // If vertical swipe is more dominant, map to horizontal
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            e.preventDefault();
-            target += deltaY;
-            target = Math.max(0, Math.min(container.scrollWidth - container.clientWidth, target));
-            touchStartY = currentY;
-        }
-    }
+    // Touch handlers for mobile have been removed. 
+    // We let the browser's native horizontal scrolling behavior (momentum, elasticity) handle touch interactions.
+    // The requestAnimationFrame loop below will seamlessly sync its internal state if it detects a native scroll.
 
     // RAF loop for smooth interpolation
     function update(timestamp: number) {
+        // Ensure bounds are always respected even if container size changes (e.g. resize, flex children loading)
+        if (container.clientWidth > 0 && container.scrollWidth > 0) {
+            const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+            target = Math.max(0, Math.min(maxScroll, target));
+            if (isNaN(target)) {
+                target = 0;
+            }
+        }
+
+        const actualScrollLeft = container.scrollLeft;
+
+        // If the browser changed the scroll position natively (e.g. trackpad swipe, touch swipe)
+        // Sync our internal state so we don't fight it.
+        if (!isAutoScrolling && Math.abs(actualScrollLeft - Math.round(current)) > 1) {
+            target = actualScrollLeft;
+            current = actualScrollLeft;
+        }
+
         if (isAutoScrolling) {
             const elapsed = timestamp - autoScrollStartTime;
             const progress = Math.min(elapsed / autoScrollDuration, 1);
-            const ease = easeInOutCubic(progress);
+            const easeProgress = easeInOutCubic(progress);
 
-            current = autoScrollStartPos + (autoScrollTargetPos - autoScrollStartPos) * ease;
+            current = autoScrollStartPos + (autoScrollTargetPos - autoScrollStartPos) * easeProgress;
 
             if (progress >= 1) {
                 isAutoScrolling = false;
                 target = current; // Sync target to end position
             }
+            container.scrollLeft = Math.round(current);
         } else {
-            current = lerp(current, target, ease);
+            if (Math.abs(target - current) > 0.5) {
+                current = lerp(current, target, ease);
+                container.scrollLeft = Math.round(current);
+            } else {
+                current = target;
+                if (Math.round(current) !== actualScrollLeft) {
+                    container.scrollLeft = Math.round(current);
+                }
+            }
         }
 
-        container.scrollLeft = Math.round(current);
         rafId = requestAnimationFrame(update);
     }
 
     // Start RAF loop
     rafId = requestAnimationFrame(update);
 
+    function onResize() {
+        const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+        target = Math.min(maxScroll, target);
+        current = Math.min(maxScroll, current);
+        container.scrollLeft = Math.round(current);
+    }
+
     // Attach listeners (passive: false for preventDefault)
     container.addEventListener('wheel', onWheel, { passive: false });
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
-    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('resize', onResize);
 
     // Expose scrollTo control
     function scrollTo(position: number, immediate = false, duration = 1000) {
@@ -149,8 +165,7 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
     const cleanup = () => {
         cancelAnimationFrame(rafId);
         container.removeEventListener('wheel', onWheel);
-        container.removeEventListener('touchstart', onTouchStart);
-        container.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('resize', onResize);
     };
 
     return { cleanup, scrollTo };

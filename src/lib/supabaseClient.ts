@@ -20,6 +20,7 @@ export const checkConnection = async () => {
         const { error } = await supabase.from('portfolio').select('count', { count: 'exact', head: true });
         if (error) return { success: false, message: error.message };
         return { success: true, message: "Connected to Supabase!" };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         return { success: false, message: e.message };
     }

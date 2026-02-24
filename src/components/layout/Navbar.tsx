@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -29,6 +29,7 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isDesktop = useMediaQuery('(min-width: 1024px)');
+    const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 1023px)');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleSectionClick = useCallback(
@@ -71,9 +72,14 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                             'linear-gradient(135deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0))',
                         backdropFilter: 'saturate(100%) blur(6px)',
                         WebkitBackdropFilter: 'saturate(100%) blur(6px)',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.02)',
+                        borderBottomLeftRadius: '12px',
+                        borderBottomRightRadius: '12px',
+                        border: 'none',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                         boxShadow:
-                            '0 4px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                            isDesktop || isTablet
+                                ? '0 2px 0px 3px rgba(255, 255, 255, 0.65)'
+                                : '0 1px 0px 3px rgba(255, 255, 255, 0.65)',
                     }}
                 >
                     <div
@@ -146,9 +152,9 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                     aria-expanded={isMobileMenuOpen}
                                 >
                                     {isMobileMenuOpen ? (
-                                        <X className="h-6 w-6" />
+                                        <X style={{ width: isTablet ? '26px' : '20px', height: isTablet ? '26px' : '20px' }} />
                                     ) : (
-                                        <Menu className="h-6 w-6" />
+                                        <Menu style={{ width: isTablet ? '26px' : '20px', height: isTablet ? '26px' : '20px' }} />
                                     )}
                                 </button>
 
@@ -162,43 +168,49 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                             className="absolute top-full mt-4 rounded-[32px] backdrop-blur-2xl origin-top-right"
                                             style={{
                                                 right: '8px',
-                                                width: '300px',
+                                                width: '240px',
                                                 maxWidth: 'calc(100vw - 20px)',
-                                                padding: '40px 20px',
-                                                backgroundColor: 'rgba(20, 20, 20, 0.85)',
-                                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                padding: '28px 16px',
+                                                backgroundColor: 'rgba(0, 0, 0, 0.45)',
+                                                backdropFilter: 'saturate(180%) blur(20px)',
+                                                WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+                                                border: '1px solid rgba(255, 255, 255, 0.15)',
                                                 boxShadow:
-                                                    '0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                                                    '0 20px 50px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
                                             }}
                                         >
-                                            <div className="flex flex-col gap-[15px]">
-                                                {SECTION_LINKS.map((section) => (
-                                                    <button
-                                                        key={section.id}
-                                                        type="button"
-                                                        onClick={() => handleSectionClick(section.id)}
-                                                        className="
-                                                            relative
-                                                            flex items-center justify-center
-                                                            w-full
-                                                            rounded-full
-                                                            px-6
-                                                            text-[20px] font-bold tracking-wide text-[#1a1a1a]
-                                                            transition-all duration-200 ease-out
-                                                            hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]
-                                                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50
-                                                        "
-                                                        style={{
-                                                            backgroundColor: '#ffffff',
-                                                            border: 'none',
-                                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                                                            fontFamily: 'var(--font-primary)',
-                                                            height: '45px',
-                                                            textTransform: 'none', // Reset since original was uppercase via class, but quicklinks uses label directly
-                                                        }}
-                                                    >
-                                                        {section.label}
-                                                    </button>
+                                            <div className="flex flex-col">
+                                                {SECTION_LINKS.map((section, index) => (
+                                                    <React.Fragment key={section.id}>
+                                                        <button
+                                                            key={section.id}
+                                                            type="button"
+                                                            onClick={() => handleSectionClick(section.id)}
+                                                            className="
+                                                                relative
+                                                                flex items-center justify-center
+                                                                w-full
+                                                                px-6
+                                                                text-[16px] font-bold tracking-wide text-white
+                                                                transition-all duration-200 ease-out
+                                                                hover:opacity-60 active:scale-[0.98]
+                                                                focus-visible:outline-none
+                                                            "
+                                                            style={{
+                                                                backgroundColor: 'transparent',
+                                                                border: 'none',
+                                                                boxShadow: 'none',
+                                                                fontFamily: 'var(--font-primary)',
+                                                                height: '36px',
+                                                                color: '#ffffff',
+                                                            }}
+                                                        >
+                                                            {section.label}
+                                                        </button>
+                                                        {index < SECTION_LINKS.length - 1 && (
+                                                            <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.2)', margin: '2px 8px' }} />
+                                                        )}
+                                                    </React.Fragment>
                                                 ))}
                                             </div>
                                         </motion.div>

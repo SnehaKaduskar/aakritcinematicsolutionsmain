@@ -1,11 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import Lottie from 'lottie-react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import quickLinkAnimation from '../../assets/quick link.json';
+
+import instaLogo from '../../assets/logo/insta.svg';
+import youtubeLogo from '../../assets/logo/youtube.svg';
+import behanceLogo from '../../assets/logo/behance.svg';
+import gmailLogo from '../../assets/logo/gmail.svg';
+import whatsappLogo from '../../assets/logo/whatsapp.svg';
 
 type QuickLink = {
     label: string;
     href: string;
     openInNewTab: boolean;
+    icon: string;
 };
 
 const QUICK_LINKS: QuickLink[] = [
@@ -13,26 +23,31 @@ const QUICK_LINKS: QuickLink[] = [
         label: 'Instagram',
         href: 'https://www.instagram.com/aakritcinematicsolutions?igsh=NjJlN3JjbjR3ZDho&utm_source=qr',
         openInNewTab: true,
+        icon: instaLogo,
     },
     {
         label: 'YouTube',
         href: 'https://www.youtube.com/@aakritcinematicsolutions',
         openInNewTab: true,
+        icon: youtubeLogo,
     },
     {
         label: 'Behance',
         href: 'https://www.behance.net/aakritcinematics',
         openInNewTab: true,
+        icon: behanceLogo,
     },
     {
         label: 'Email Studio',
         href: 'mailto:studio@aakritcinematic.in',
         openInNewTab: false,
+        icon: gmailLogo,
     },
     {
         label: 'WhatsApp',
         href: 'https://wa.me/919819886633',
         openInNewTab: true,
+        icon: whatsappLogo,
     },
 ];
 
@@ -42,6 +57,7 @@ const SITE_BACKGROUND = '#F2DD5E';
 const FloatingContactMenu = ({ isVisible = true }: { isVisible?: boolean }) => {
     const [isOpen, setIsOpen] = useState(false);
     const rootRef = useRef<HTMLDivElement>(null);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
@@ -76,8 +92,8 @@ const FloatingContactMenu = ({ isVisible = true }: { isVisible?: boolean }) => {
             className="flex flex-col items-end gap-4"
             style={{
                 position: 'fixed',
-                right: '40px',
-                bottom: '40px',
+                right: isMobile ? '20px' : '40px',
+                bottom: isMobile ? '20px' : '40px',
                 zIndex: 2147483647,
             }}
         >
@@ -90,53 +106,49 @@ const FloatingContactMenu = ({ isVisible = true }: { isVisible?: boolean }) => {
                 <div
                     className="rounded-[32px] backdrop-blur-2xl"
                     style={{
-                        width: '300px',
-                        padding: '40px 20px',
-                        backgroundColor: 'rgba(20, 20, 20, 0.85)',
+                        width: '90px',
+                        padding: '20px 16px',
+                        backgroundColor: 'rgba(20, 20, 20, 0.4)',
                         border: '1px solid rgba(255, 255, 255, 0.1)',
                         boxShadow:
                             '0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                     }}
                 >
-                    <p className="w-full pb-12 pt-1 font-bold uppercase tracking-[0.2em] text-center select-none" style={{ fontFamily: 'var(--font-primary)', color: '#ffffff', fontSize: '20px' }}>
-                        Quick Contact
-                    </p>
                     <ul
                         className="list-none m-0 p-0 w-full"
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '15px'
+                            alignItems: 'center',
+                            gap: '12px'
                         }}
                     >
                         {QUICK_LINKS.map((link) => (
-                            <li key={link.label} className="w-full">
+                            <li key={link.label}>
                                 <a
                                     href={link.href}
                                     target={link.openInNewTab ? '_blank' : undefined}
                                     rel={link.openInNewTab ? 'noopener noreferrer' : undefined}
                                     onClick={() => setIsOpen(false)}
+                                    aria-label={link.label}
+                                    title={link.label}
                                     className="
-                                        relative
                                         flex items-center justify-center
-                                        w-full
                                         rounded-full
-                                        px-6
-                                        text-[20px] font-semibold tracking-wide text-[#1a1a1a]
                                         transition-all duration-200 ease-out
-                                        hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]
+                                        hover:scale-110 active:scale-95
                                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50
                                     "
                                     style={{
                                         backgroundColor: '#ffffff',
                                         border: 'none',
-                                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                                        fontFamily: 'var(--font-primary)',
+                                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                                         textDecoration: 'none',
-                                        height: '45px',
+                                        width: '52px',
+                                        height: '52px',
                                     }}
                                 >
-                                    {link.label}
+                                    <img src={link.icon} alt={link.label} style={{ width: '26px', height: '26px', objectFit: 'contain' }} />
                                 </a>
                             </li>
                         ))}
@@ -154,28 +166,29 @@ const FloatingContactMenu = ({ isVisible = true }: { isVisible?: boolean }) => {
                     relative
                     rounded-full
                     inline-flex items-center justify-center
-                    text-[18px] font-bold tracking-wider text-white
-                    leading-none whitespace-nowrap
                     transition-all duration-300 ease-out
                     hover:-translate-y-1 hover:shadow-lg
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50
-                    ${isOpen ? 'w-20 h-20 p-0 rotate-0' : 'min-w-[140px] h-[60px] px-8'}
+                    p-0 rotate-0
                 `}
                 style={{
-                    backgroundColor: RAISIN_BLACK,
-                    color: '#ffffff',
-                    border: `1px solid ${SITE_BACKGROUND}40`,
-                    boxShadow:
-                        '0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
-                    fontFamily: 'var(--font-primary)',
-                    width: isOpen ? '60px' : undefined,
-                    height: isOpen ? '60px' : undefined,
+                    backgroundColor: isOpen ? RAISIN_BLACK : 'transparent',
+                    border: isOpen ? `1px solid ${SITE_BACKGROUND}40` : 'none',
+                    boxShadow: isOpen ? '0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)' : 'none',
+                    width: isMobile ? '50px' : '60px',
+                    height: isMobile ? '50px' : '60px',
                 }}
             >
                 {isOpen ? (
-                    <X className="text-white/90 transition-transform duration-300 group-hover:rotate-90" style={{ width: '30px', height: '30px' }} />
+                    <X className="transition-transform duration-300 group-hover:rotate-90" style={{ width: isMobile ? '24px' : '30px', height: isMobile ? '24px' : '30px', color: '#ffffff' }} />
                 ) : (
-                    <span className="translate-y-[1px]">Quick Links</span>
+                    <div style={{ width: isMobile ? '60px' : '80px', height: isMobile ? '60px' : '80px', transform: 'scale(1.2)' }}>
+                        <Lottie
+                            animationData={quickLinkAnimation}
+                            loop={true}
+                            style={{ width: '100%', height: '100%' }}
+                        />
+                    </div>
                 )}
             </button>
         </div>,
