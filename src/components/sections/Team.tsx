@@ -57,11 +57,15 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
         }
     }, []);
 
+    /* Safe-zone constants (px) — navbar top + mascot bottom */
+    const navH = isDesktop ? 100 : isTablet ? 120 : 90; // navbar + breathing room per breakpoint
+    const mascotH = isDesktop ? 160 : 110; // mascot 150/100 + small buffer
+
     return (
         <section
             id={id}
             style={{
-                height: '100vh',
+                height: '100dvh',
                 width: '100%',
                 maxWidth: '100%',
                 display: 'flex',
@@ -71,93 +75,70 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                 position: 'relative',
                 overflow: 'hidden',
                 boxSizing: 'border-box',
-                padding: isDesktop ? '0 5vw 2vh' : isTablet ? '4vh 6vw' : '4vh 7vw',
+                paddingTop: `${navH}px`,
+                paddingBottom: `${mascotH}px`,
+                paddingLeft: isDesktop ? '5vw' : isTablet ? '6vw' : '7vw',
+                paddingRight: isDesktop ? '5vw' : isTablet ? '6vw' : '7vw',
                 flexShrink: 0,
             }}
             className="bg-background text-text"
         >
-            {/* ── Header with Retroica font, intense glow, gradient underline ── */}
+            {/* ── Header — matching About / Services / Portfolio title style ── */}
             <header style={{
                 position: 'relative',
                 zIndex: 20,
-                marginTop: isDesktop ? '-20px' : '0',
-                marginBottom: isDesktop ? '3vh' : isTablet ? '4vh' : '4vh',
+                marginBottom: isDesktop ? '3vh' : isTablet ? '1.5vh' : '2vh',
                 width: '100%',
                 maxWidth: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: isDesktop ? '0.1rem' : isTablet ? '1rem' : '0.8rem',
             }}>
-                <h1 style={{
-                    margin: 0,
-                    lineHeight: 1,
-                    fontWeight: 400,
-                    display: 'inline-block',
-                    whiteSpace: 'nowrap',
-                    position: 'relative',
-                }}>
-                    <span style={{
-                        fontFamily: RETROICA,
-                        fontSize: isDesktop ? 'clamp(3rem, 5.5vw, 7rem)' : isTablet ? 'clamp(2.5rem, 7vw, 5rem)' : 'clamp(2rem, 9vw, 4rem)',
-                        letterSpacing: '-0.02em',
-                        color: '#FFFFFF',
-                        textTransform: 'lowercase',
-                        fontWeight: 400,
-                        textShadow: `
-                            0 0 8px rgba(255, 165, 0, 0.5),
-                            0 0 16px rgba(255, 165, 0, 0.35),
-                            0 0 30px rgba(255, 165, 0, 0.25),
-                            0 0 50px rgba(255, 165, 0, 0.15),
-                            0 0 70px rgba(255, 165, 0, 0.08)
-                        `,
-                    }}>
-                        our team
-                    </span>
-                    <span style={{
-                        fontFamily: RETROICA,
-                        fontSize: isDesktop ? 'clamp(3rem, 5.5vw, 7rem)' : isTablet ? 'clamp(2.5rem, 7vw, 5rem)' : 'clamp(2rem, 9vw, 4rem)',
-                        color: '#FFFFFF',
-                        fontWeight: 400,
-                        textShadow: `
-                            0 0 8px rgba(255, 165, 0, 0.5),
-                            0 0 16px rgba(255, 165, 0, 0.35),
-                            0 0 30px rgba(255, 165, 0, 0.25),
-                            0 0 50px rgba(255, 165, 0, 0.15),
-                            0 0 70px rgba(255, 165, 0, 0.08)
-                        `,
-                    }}>
-                        .
-                    </span>
-                </h1>
+                <h2
+                    className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
+                    style={{
+                        fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                        textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+                        color: '#ffffffff',
+                        paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                        letterSpacing: '0.12em',
+                        fontFamily: 'Retroica, sans-serif',
+                    }}
+                >
+                    our team.
+                </h2>
 
-
-                {/* Clean underline with subtle warm glow - matching portfolio style */}
-                <div style={{
-                    position: 'relative',
-                    width: isDesktop ? '80%' : isTablet ? '70%' : '60%',
-                    maxWidth: '900px',
-                    height: '3px',
-                    background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%)',
-                    borderRadius: '1px',
-                    boxShadow: '0 2px 8px rgba(255, 165, 0, 0.12)',
-                }} />
+                {/* Decorative accent line — same as other pages */}
+                <div
+                    className="flex-shrink-0"
+                    style={{
+                        width: 'clamp(280px, 60vw, 900px)',
+                        height: '3px',
+                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+                        borderRadius: '9999px',
+                    }}
+                />
             </header>
 
-            {/* ── Cards grid ── */}
+            {/* ── Cards grid — flex-constrained so it never bleeds behind mascot ── */}
             <div style={{
                 width: '100%',
-                maxWidth: isDesktop ? '1050px' : isTablet ? '420px' : '320px',
+                maxWidth: isDesktop ? '1050px' : isTablet ? '480px' : '320px',
                 position: 'relative',
                 zIndex: 30,
                 boxSizing: 'border-box',
                 margin: '0 auto',
+                flex: '1 1 0%',
+                minHeight: 0,
+                display: 'flex',
+                alignItems: isDesktop ? 'center' : 'flex-start',
             }}>
                 <div ref={containerRef} style={{
                     position: 'relative',
                     width: '100%',
                     overflow: 'visible',
+                    maxHeight: '100%',
                 }}>
                     <div style={{
                         display: 'grid',
@@ -178,7 +159,7 @@ const Team = ({ id = 'our team' }: { id?: string }) => {
                                         position: 'relative',
                                         width: '100%',
                                         aspectRatio: '1080 / 1350',
-                                        height: 'auto',
+                                        maxHeight: `calc((100dvh - ${navH + mascotH}px - 4rem) / ${isDesktop ? 1 : 2})`,
                                         borderRadius: isDesktop ? '12px' : '10px',
                                         overflow: 'visible',
                                         cursor: isDesktop ? 'pointer' : 'default',
