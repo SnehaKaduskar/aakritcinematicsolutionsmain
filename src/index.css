@@ -46,6 +46,13 @@
   font-family: 'Retroica' !important;
 }
 
+/* Calisto font for About Us body text — higher specificity than * wins */
+.font-calisto,
+.font-calisto p,
+.font-calisto * {
+  font-family: 'Calisto', serif !important;
+}
+
 body {
   margin: 0;
   padding: 0;
